@@ -43,7 +43,7 @@ function populateTable(data) {
         row.forEach((cell, index) => {
             const td = document.createElement('td');
 
-            if (index === 4) {
+            if (index === 4 && cell.includes('drive.google.com')) {
                 const fileId = cell.split('/')[5];
                 const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
                 const originalUrl = `https://drive.google.com/uc?id=${fileId}`;
@@ -51,9 +51,7 @@ function populateTable(data) {
                 const img = document.createElement('img');
                 img.src = thumbnailUrl;
                 img.alt = 'Catalog Image';
-                img.style.width = '70px';
                 img.style.cursor = 'pointer';
-
                 img.addEventListener('click', () => openModal(originalUrl));
 
                 td.appendChild(img);
@@ -71,43 +69,36 @@ function filterTableByInputs() {
     const inputs = document.querySelectorAll("thead input");
     const filters = Array.from(inputs).map(input => input.value.toLowerCase());
     const rows = document.querySelectorAll("#catalog-table tbody tr");
-
-    const spinner = document.getElementById('loading-spinner');
     const noResults = document.getElementById('no-results');
-    spinner.style.display = 'block';
 
-    setTimeout(() => {
-        let visibleCount = 0;
+    let visibleCount = 0;
 
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            let match = true;
-            filters.forEach((filter, i) => {
-                const index = inputs[i].dataset.index;
-                if (filter && (!cells[index] || !cells[index].innerText.toLowerCase().includes(filter))) {
-                    match = false;
-                }
-            });
-
-            if (match) {
-                row.style.opacity = '1';
-                row.style.display = '';
-                visibleCount++;
-            } else {
-                row.style.opacity = '0';
-                row.style.display = 'none';
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        let match = true;
+        filters.forEach((filter, i) => {
+            const index = inputs[i].dataset.index;
+            if (filter && (!cells[index] || !cells[index].innerText.toLowerCase().includes(filter))) {
+                match = false;
             }
         });
 
-        spinner.style.display = 'none';
-        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
-    }, 200);
+        if (match) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    noResults.style.display = visibleCount === 0 ? 'block' : 'none';
 }
 
 function openModal(imgSrc) {
     const modal = document.getElementById('image-modal');
     const modalImg = document.getElementById('modal-img');
     modalImg.src = imgSrc;
+    modal.style.animation = 'zoomIn 0.5s'; // Zoom animasyonu
     modal.style.display = 'block';
 }
 
@@ -128,29 +119,20 @@ function init() {
 
 function filterTableBySearch(query) {
     const rows = document.querySelectorAll("#catalog-table tbody tr");
-    const spinner = document.getElementById('loading-spinner');
     const noResults = document.getElementById('no-results');
+    let visibleCount = 0;
 
-    spinner.style.display = 'block';
+    rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        if (text.includes(query.toLowerCase())) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
 
-    setTimeout(() => {
-        let visibleCount = 0;
-
-        rows.forEach(row => {
-            const text = row.innerText.toLowerCase();
-            if (text.includes(query.toLowerCase())) {
-                row.style.opacity = '1';
-                row.style.display = '';
-                visibleCount++;
-            } else {
-                row.style.opacity = '0';
-                row.style.display = 'none';
-            }
-        });
-
-        spinner.style.display = 'none';
-        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
-    }, 200);
+    noResults.style.display = visibleCount === 0 ? 'block' : 'none';
 }
 
 init();
