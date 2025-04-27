@@ -15,7 +15,7 @@ function populateTable(data) {
     tbody.innerHTML = '';
     thead.innerHTML = '';
 
-    const headers = ["Malzeme ismi", "Part number", "Kategori", "Uçak Tipi", "Resim"];
+    const headers = ["Resim", "Malzeme ismi", "Part number", "Kategori", "Uçak Tipi"];
     
     // Table header
     const headerRow = document.createElement('tr');
@@ -71,7 +71,11 @@ function populateTable(data) {
 
                 td.appendChild(link);
             } else {
-                td.textContent = cell;
+                const div = document.createElement('div');
+                const span = document.createElement('span');
+                span.textContent = cell;
+                div.appendChild(span);
+                td.appendChild(div);
             }
             tr.appendChild(td);
         });
