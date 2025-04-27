@@ -2,8 +2,6 @@ const API_KEY = 'AIzaSyDltb5FbPvL9bLgj_GK4_DEDaPK0A7oM_g';
 const SHEET_ID = '16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk';
 const RANGE = 'Sayfa1';
 
-let theme = 'light';
-
 async function fetchSheetData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
     const response = await fetch(url);
@@ -17,7 +15,7 @@ function populateTable(data) {
     tbody.innerHTML = '';
     thead.innerHTML = '';
 
-    const headers = ["Resim", "Malzeme ismi", "Part number", "Kategori", "Uçak Tipi"];
+    const headers = ["Malzeme ismi", "Part number", "Kategori", "Uçak Tipi", "Resim"];
 
     const headerRow = document.createElement('tr');
     headers.forEach(header => {
@@ -28,63 +26,67 @@ function populateTable(data) {
     thead.appendChild(headerRow);
 
     const filterRow = document.createElement('tr');
-    const filterCategories = ["Kategori", "Uçak Tipi"];
     headers.forEach((header, index) => {
         const td = document.createElement('td');
 
-        // Kategori ve Uçak Tipi için filtreleme
-        if (filterCategories.includes(header)) {
-            const select = document.createElement('select');
-            select.innerHTML = `<option value="">Tümü</option>`;
-            const uniqueValues = [...new Set(data.slice(1).map(row => row[index]))];
-            uniqueValues.forEach(value => {
-                select.innerHTML += `<option value="${value}">${value}</option>`;
-            });
-            select.addEventListener('change', filterTableBySelect);
-            td.appendChild(select);
-        }
+        // SADECE "Malzeme ismi" ve "Part number" için kutucuk ekle
+        if (index === 0 || index === 1) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = "Ara...";
+            input.dataset.index = index;
 
+            input.addEventListener('input', filterTableByInputs);
+
+            td.appendChild(input);
+        }
         filterRow.appendChild(td);
     });
     thead.appendChild(filterRow);
 
     data.slice(1).forEach(row => {
         const tr = document.createElement('tr');
-        const imgUrl = `https://drive.google.com/thumbnail?id=${row[4].split('/')[5]}`;
-        const linkUrl = `https://drive.google.com/file/d/${row[4].split('/')[5]}/view`;
-
-        const imageCell = document.createElement('td');
-        const imgLink = document.createElement('a');
-        imgLink.href = linkUrl;
-        imgLink.target = '_blank';
-        const img = document.createElement('img');
-        img.src = imgUrl;
-        img.alt = 'Catalog Image';
-        img.style.width = '100px';
-        img.style.height = 'auto';
-        imgLink.appendChild(img);
-        imageCell.appendChild(imgLink);
-        tr.appendChild(imageCell);
-
-        row.slice(0, 4).forEach((cell, index) => {
+        row.forEach((cell, index) => {
             const td = document.createElement('td');
-            td.textContent = cell;
+
+            if (index === 4) {
+                const fileId = cell.split('/')[5];
+                const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
+                const originalUrl = `https://drive.google.com/file/d/${fileId}/view`;
+
+                const link = document.createElement('a');
+                link.href = originalUrl;
+                link.target = '_blank';
+
+                const img = document.createElement('img');
+                img.src = thumbnailUrl;
+                img.alt = 'Catalog Image';
+                img.style.width = '70px';
+                img.style.height = 'auto';
+                link.appendChild(img);
+
+                td.appendChild(link);
+            } else {
+                td.textContent = cell;
+            }
+
             tr.appendChild(td);
         });
         tbody.appendChild(tr);
     });
 }
 
-function filterTableBySelect() {
-    const selects = document.querySelectorAll("thead select");
-    const selectedValues = Array.from(selects).map(select => select.value.toLowerCase());
+function filterTableByInputs() {
+    const inputs = document.querySelectorAll("thead input");
+    const filters = Array.from(inputs).map(input => input.value.toLowerCase());
     const rows = document.querySelectorAll("#catalog-table tbody tr");
 
     rows.forEach(row => {
         const cells = row.querySelectorAll('td');
         let match = true;
-        selectedValues.forEach((value, i) => {
-            if (value && !cells[i + 1].textContent.toLowerCase().includes(value)) {
+        filters.forEach((filter, i) => {
+            const index = inputs[i].dataset.index;
+            if (filter && !cells[index].innerText.toLowerCase().includes(filter)) {
                 match = false;
             }
         });
@@ -96,9 +98,6 @@ function init() {
     const searchBox = document.getElementById('search-box');
     searchBox.addEventListener('input', (e) => filterTableBySearch(e.target.value));
 
-    // Theme toggle
-    document.getElementById('mode-btn').addEventListener('click', toggleTheme);
-
     fetchSheetData().then(data => populateTable(data));
 }
 
@@ -108,20 +107,6 @@ function filterTableBySearch(query) {
         const text = row.innerText.toLowerCase();
         row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
     });
-}
-
-function toggleTheme() {
-    if (theme === 'light') {
-        document.body.classList.add('dark-theme');
-        document.body.classList.remove('light-theme');
-        document.getElementById('mode-btn').textContent = 'Gündüz Modu';
-        theme = 'dark';
-    } else {
-        document.body.classList.add('light-theme');
-        document.body.classList.remove('dark-theme');
-        document.getElementById('mode-btn').textContent = 'Gece Modu';
-        theme = 'light';
-    }
 }
 
 init();
