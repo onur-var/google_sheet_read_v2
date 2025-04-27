@@ -166,16 +166,23 @@ body.dark-mode .catalog-card {
     }
 
     .catalog-card {
-        flex-direction: row; /* Sütun yerine satır olarak değiştir */
-        align-items: flex-start; /* Üstten hizala */
-        text-align: left; /* Sola hizalı metin */
+        flex-direction: row !important; /* Kesinlikle satır düzeni */
+        align-items: flex-start;
+        text-align: left;
+        padding: 10px; /* Daha kompakt bir padding */
     }
 
     .catalog-card img {
-        width: 80px; /* Mobilde biraz daha küçük resim */
+        width: 80px;
         height: auto;
-        margin-right: 15px; /* Sağ boşluk ekle */
-        margin-bottom: 0; /* Alt boşluğu kaldır */
+        margin-right: 10px !important; /* Sağ boşluk kesinlikle uygulanacak */
+        margin-bottom: 0 !important; /* Alt boşluk kesinlikle kaldırılacak */
+        min-width: 80px; /* Resmin küçülmesini engelle */
+    }
+
+    .catalog-card .card-content {
+        flex: 1; /* Kalan alanı doldur */
+        min-width: 0; /* Taşmayı engelle */
     }
 
     .mode-toggle {
