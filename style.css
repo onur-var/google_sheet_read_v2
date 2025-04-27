@@ -70,18 +70,23 @@ h1 {
     font-size: 13px;
     vertical-align: middle;
     word-break: break-word;
+    display: flex;
+    align-items: center;
 }
 
 #catalog-table tbody td img {
-    max-width: 100px;
+    width: 100px;
     height: auto;
-    margin-right: 10px;
+    margin-right: 15px;
 }
 
-#catalog-table tbody td {
+#catalog-table tbody td div {
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    flex-direction: column;
+}
+
+#catalog-table tbody td div span {
+    margin-bottom: 5px;
 }
 
 #catalog-table tbody td a {
@@ -109,11 +114,11 @@ select {
     }
 
     #catalog-table tbody td img {
-        max-width: 70px;
+        max-width: 80px;
     }
 
     #catalog-table tbody td {
-        flex-direction: column;
-        text-align: center;
+        flex-direction: row;
+        text-align: left;
     }
 }
