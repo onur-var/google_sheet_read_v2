@@ -25,6 +25,7 @@ h1 {
 
 #catalog-table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
     background: #fff;
     border-radius: 8px;
@@ -42,6 +43,7 @@ h1 {
     text-align: left;
     font-weight: bold;
     font-size: 14px;
+    word-break: break-word;
 }
 
 #catalog-table tbody tr {
@@ -58,6 +60,7 @@ h1 {
     text-align: left;
     font-size: 13px;
     vertical-align: middle;
+    word-break: break-word;
 }
 
 #catalog-table tbody td img {
@@ -70,6 +73,14 @@ h1 {
 
 #catalog-table tbody td a {
     text-decoration: none;
+}
+
+thead input {
+    width: 90%;
+    padding: 4px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
 }
 
 select {
@@ -87,14 +98,14 @@ select {
         padding: 10px;
     }
 
+    #search-box {
+        font-size: 14px;
+    }
+
     #catalog-table thead th, 
     #catalog-table tbody td {
         font-size: 12px;
         padding: 6px;
-    }
-
-    #search-box {
-        font-size: 14px;
     }
 
     #catalog-table tbody td img {
