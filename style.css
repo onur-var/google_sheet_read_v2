@@ -1,3 +1,4 @@
+/* Gece modunda ve gündüzdeki varsayılan renkler */
 :root {
   --bg-color: #f9f9f9;
   --text-color: #333;
@@ -6,6 +7,7 @@
   --hover-color: #f1f1f1;
 }
 
+/* Gece modundaki renkler */
 body.dark-mode {
   --bg-color: #121212;
   --text-color: #eee;
@@ -58,6 +60,7 @@ h1 {
   font-size: 16px;
 }
 
+/* Mobil uyumlu filtreler */
 #filters {
   display: flex;
   gap: 10px;
@@ -72,82 +75,71 @@ h1 {
   border: 1px solid #ccc;
 }
 
+/* Tablonun genel stili */
 #catalog-table {
   width: 100%;
-  table-layout: auto;
+  table-layout: fixed;
   border-collapse: collapse;
   background: var(--table-bg);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
-  margin-top: 20px;
+  word-wrap: break-word;
 }
 
-#catalog-table th,
-#catalog-table td {
+#catalog-table th, #catalog-table td {
   padding: 10px;
-  text-align: center;
-  word-wrap: break-word; /* Çoğu cihazda sığmayan metinleri kırar */
+  text-align: left;
+  word-break: break-word; /* Kelimeleri satır sonuna sarmayı sağlar */
 }
 
-#catalog-table th {
-  background-color: var(--header-color);
-  color: white;
+/* Resimleri esnek yapıyoruz */
+#catalog-table img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
 }
 
-#catalog-table img.thumbnail {
-  max-width: 100px; /* Mobil uyumlu küçük resimler */
-  max-height: 100px;
-  object-fit: cover; /* Resmin dışarı taşmaması için */
+/* Hücreler için hover efekti */
+#catalog-table tbody tr:hover {
+  background-color: var(--hover-color);
 }
 
-@media screen and (max-width: 768px) {
+/* Mobil uyumlu tablo görünümü */
+@media screen and (max-width: 600px) {
   #catalog-table {
-    font-size: 14px;
-    border: 0;
+    width: 100%;
+    display: block;
+    overflow-x: auto; /* Kaydırma butonu ekler */
+    -webkit-overflow-scrolling: touch;
   }
 
-  #catalog-table th, #catalog-table td {
-    padding: 8px;
+  #catalog-table thead {
+    display: none; /* Başlıkları gizle */
   }
 
-  #search-box {
-    max-width: 100%;
-  }
-
-  #filters {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  #filters select {
-    width: 90%;
+  #catalog-table tr {
+    display: block;
     margin-bottom: 10px;
   }
 
   #catalog-table td {
-    font-size: 12px;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  #catalog-table {
-    font-size: 12px;
-  }
-
-  #catalog-table td {
-    padding: 5px;
-  }
-
-  #filters select {
+    display: block;
     width: 100%;
+    text-align: right; /* Başlıkları sağa yasla */
+    border-bottom: 1px solid #ddd;
   }
 
-  #search-box {
-    width: 100%;
+  #catalog-table td::before {
+    content: attr(data-label); /* Sütun adlarını eklemek için */
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
   }
 
-  #theme-toggle {
-    font-size: 20px;
+  #catalog-table td img {
+    max-width: 100%;
+    height: auto;
   }
 }
