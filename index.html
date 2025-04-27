@@ -6,19 +6,23 @@
   <title>ISL2-Cabin P/N Katalog Programı</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="light-mode">
+  <div class="mode-toggle">
+    <button id="mode-toggle-btn">Gece Modu</button>
+  </div>
+  <h1>Cabin P/N Katalog Uygulaması</h1>
   <div id="app-container">
-    <header>
-      <h1>Cabin P/N Katalog Uygulaması</h1>
-      <label for="theme-toggle" class="theme-toggle">
-        <input type="checkbox" id="theme-toggle">
-        <span>Gece/Gündüz</span>
-      </label>
-    </header>
-    <table id="catalog-table">
-      <thead></thead>
-      <tbody></tbody>
-    </table>
+    <input id="search-box" placeholder="Malzeme veya Part No ara..." />
+    <div id="filter-container">
+      <select id="category-filter">
+        <option value="">Tüm Kategoriler</option>
+      </select>
+      <select id="aircraft-filter">
+        <option value="">Tüm Uçak Tipleri</option>
+      </select>
+    </div>
+    <div id="loading-spinner">Yükleniyor...</div>
+    <div id="catalog-container"></div>
   </div>
   <script src="app.js"></script>
 </body>
