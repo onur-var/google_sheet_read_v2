@@ -8,14 +8,27 @@
 </head>
 <body class="light-mode">
   <div class="header-container">
-    <h1>Cabin P/N Katalog</h1>
+    <h1>Cabin P/N Katalog Uygulaması</h1>
     <div class="header-buttons">
-      <button id="mode-toggle-btn" class="icon-btn" title="Gece/Gündüz Modu">🌓</button>
-      <button id="developer-btn" class="icon-btn" title="Geliştirici">👨‍💻</button>
-      <button id="sheet-btn" class="icon-btn" title="Veri Sayfası">📊</button>
+      <button id="mode-toggle-btn">Gece Modu</button>
+      <button id="developer-btn">Geliştirici</button>
+      <button id="sheet-btn">Veri Sayfası</button>
     </div>
   </div>
-  <!-- Diğer içerik aynı kalıyor -->
+  <div id="app-container">
+    <input id="search-box" placeholder="Malzeme veya Part No ara..." />
+    <div id="filter-container">
+      <select id="category-filter">
+        <option value="">Tüm Kategoriler</option>
+      </select>
+      <select id="aircraft-filter">
+        <option value="">Tüm Uçak Tipleri</option>
+      </select>
+    </div>
+    <div id="loading-spinner">Yükleniyor...</div>
+    <div id="catalog-container"></div>
+  </div>
+  <div id="developer-popup" class="hidden">Onur VAR</div>
   <script src="app.js"></script>
 </body>
 </html>
