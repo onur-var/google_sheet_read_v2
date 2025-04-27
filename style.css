@@ -1,84 +1,7 @@
-/* Gece modunda ve gündüzdeki varsayılan renkler */
-:root {
-  --bg-color: #f9f9f9;
-  --text-color: #333;
-  --header-color: #007bff;
-  --table-bg: #fff;
-  --hover-color: #f1f1f1;
-}
-
-/* Gece modundaki renkler */
-body.dark-mode {
-  --bg-color: #121212;
-  --text-color: #eee;
-  --header-color: #66b2ff;
-  --table-bg: #1e1e1e;
-  --hover-color: #333;
-}
-
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 10px;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background 0.5s, color 0.5s;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-h1 {
-  margin: 10px 0;
-  font-size: 22px;
-  color: var(--header-color);
-}
-
-#theme-toggle {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  transition: transform 0.4s;
-}
-
-#theme-toggle:hover {
-  transform: rotate(20deg);
-}
-
-#search-box {
-  width: 95%;
-  max-width: 400px;
-  margin: 15px auto;
-  padding: 8px;
-  display: block;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-}
-
-/* Mobil uyumlu filtreler */
-#filters {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 15px;
-}
-
-#filters select {
-  padding: 8px;
-  font-size: 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
 /* Tablonun genel stili */
 #catalog-table {
   width: 100%;
-  table-layout: fixed;
+  table-layout: fixed; /* Tabloyu esnek yapıyoruz */
   border-collapse: collapse;
   background: var(--table-bg);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -91,6 +14,7 @@ h1 {
   padding: 10px;
   text-align: left;
   word-break: break-word; /* Kelimeleri satır sonuna sarmayı sağlar */
+  overflow: hidden; /* Taşmayı engeller */
 }
 
 /* Resimleri esnek yapıyoruz */
@@ -99,6 +23,7 @@ h1 {
   height: auto;
   display: block;
   border-radius: 8px;
+  object-fit: contain; /* Resmin içeriği sığacak şekilde ölçeklenir */
 }
 
 /* Hücreler için hover efekti */
@@ -113,6 +38,7 @@ h1 {
     display: block;
     overflow-x: auto; /* Kaydırma butonu ekler */
     -webkit-overflow-scrolling: touch;
+    table-layout: auto; /* Esnek sütun genişlikleri */
   }
 
   #catalog-table thead {
