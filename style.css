@@ -1,9 +1,21 @@
+/* Genel stil ayarları */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 20px;
     background-color: #f9f9f9;
     color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.light-theme {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+body.dark-theme {
+    background-color: #333;
+    color: #f9f9f9;
 }
 
 h1 {
@@ -12,25 +24,27 @@ h1 {
     margin-bottom: 20px;
 }
 
-#search-box {
-    width: 90%;
-    max-width: 400px;
-    padding: 8px;
-    margin: 0 auto 20px;
-    display: block;
-    border: 1px solid #ccc;
+#mode-btn {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
     border-radius: 5px;
     font-size: 16px;
+    display: block;
+    margin: 10px auto;
 }
 
 #catalog-table {
     width: 100%;
-    table-layout: fixed;
+    table-layout: auto;
     border-collapse: collapse;
     background: #fff;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
 #catalog-table thead {
@@ -39,11 +53,10 @@ h1 {
 }
 
 #catalog-table thead th {
-    padding: 8px;
+    padding: 12px;
     text-align: left;
     font-weight: bold;
-    font-size: 14px;
-    word-break: break-word;
+    font-size: 16px;
 }
 
 #catalog-table tbody tr {
@@ -57,30 +70,16 @@ h1 {
 
 #catalog-table tbody td {
     padding: 8px;
-    text-align: left;
-    font-size: 13px;
-    vertical-align: middle;
-    word-break: break-word;
+    font-size: 14px;
+    vertical-align: top;
 }
 
 #catalog-table tbody td img {
-    border-radius: 5px;
+    border-radius: 8px;
     display: block;
     margin: 0 auto;
-    max-width: 70px;
+    width: 100px;
     height: auto;
-}
-
-#catalog-table tbody td a {
-    text-decoration: none;
-}
-
-thead input {
-    width: 90%;
-    padding: 4px;
-    font-size: 12px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
 }
 
 select {
@@ -89,26 +88,38 @@ select {
     border-radius: 5px;
     border: 1px solid #ccc;
     width: 100%;
-    box-sizing: border-box;
 }
 
-/* Mobil uyumluluk */
 @media screen and (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-
-    #search-box {
-        font-size: 14px;
-    }
-
-    #catalog-table thead th, 
+    #catalog-table thead th,
     #catalog-table tbody td {
         font-size: 12px;
         padding: 6px;
     }
 
     #catalog-table tbody td img {
-        max-width: 60px;
+        width: 80px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #catalog-table tbody td img {
+        width: 60px;
+    }
+
+    #catalog-table tbody td {
+        display: block;
+        text-align: left;
+        padding: 5px;
+    }
+
+    #catalog-table tbody tr {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    #catalog-table tbody td:first-child {
+        margin-right: 15px;
     }
 }
