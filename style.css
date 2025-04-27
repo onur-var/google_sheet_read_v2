@@ -2,123 +2,182 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #f9f9f9;
-    color: #333;
     transition: background-color 0.3s, color 0.3s;
 }
 
-body.dark-mode {
-    background-color: #333;
-    color: #fff;
+body.light-mode {
+    background-color: #f9f9f9;
+    color: #333;
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+body.dark-mode {
+    background-color: #222;
+    color: #ddd;
 }
 
 h1 {
-    text-align: left;
+    text-align: center;
     color: #007bff;
-    margin: 0;
+    margin-bottom: 20px;
 }
 
-.theme-toggle {
+#search-box {
+    width: 90%;
+    max-width: 400px;
+    padding: 10px;
+    margin: 0 auto 20px;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     font-size: 16px;
+    transition: border-color 0.3s;
 }
 
-#theme-toggle {
-    transform: scale(1.5);
+#search-box:focus {
+    border-color: #007bff;
+    outline: none;
 }
 
-#catalog-table {
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
+#filter-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+#filter-container select {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 200px;
+    transition: border-color 0.3s;
+}
+
+#filter-container select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+#catalog-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.catalog-card {
+    display: flex;
     background: #fff;
     border-radius: 8px;
-    overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: fadeIn 0.5s ease-in;
 }
 
-#catalog-table thead {
-    background-color: #007bff;
-    color: #fff;
+body.dark-mode .catalog-card {
+    background: #333;
 }
 
-#catalog-table thead th {
-    padding: 10px;
-    text-align: left;
-    font-weight: bold;
+.catalog-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.catalog-card img {
+    width: 100px;
+    height: auto;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.catalog-card .card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.catalog-card .card-content div {
+    margin: 5px 0;
     font-size: 14px;
 }
 
-#catalog-table tbody tr {
-    border-bottom: 1px solid #ddd;
+.catalog-card .card-content div strong {
+    color: #007bff;
+}
+
+.mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+#mode-toggle-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
     transition: background-color 0.3s;
 }
 
-#catalog-table tbody tr:hover {
-    background-color: #f1f1f1;
+#mode-toggle-btn:hover {
+    background-color: #0056b3;
 }
 
-#catalog-table tbody td {
-    padding: 10px;
-    text-align: left;
-    font-size: 13px;
-    vertical-align: middle;
-    word-break: break-word;
-    display: flex;
-    align-items: center;
+#loading-spinner {
+    text-align: center;
+    font-size: 16px;
+    color: #007bff;
+    display: none;
 }
 
-#catalog-table tbody td img {
-    width: 100px;
-    height: auto;
-    margin-right: 15px;
+#loading-spinner.active {
+    display: block;
 }
 
-#catalog-table tbody td div {
-    display: flex;
-    flex-direction: column;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-#catalog-table tbody td div span {
-    margin-bottom: 5px;
-}
-
-#catalog-table tbody td a {
-    text-decoration: none;
-}
-
-select {
-    padding: 6px;
-    font-size: 13px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    width: 100%;
-    box-sizing: border-box;
-}
-
+/* Mobile compatibility */
 @media screen and (max-width: 768px) {
     body {
         padding: 10px;
     }
 
-    #catalog-table thead th, 
-    #catalog-table tbody td {
-        font-size: 12px;
-        padding: 8px;
+    #search-box {
+        font-size: 14px;
     }
 
-    #catalog-table tbody td img {
-        max-width: 80px;
+    #filter-container {
+        flex-direction: column;
+        align-items: center;
     }
 
-    #catalog-table tbody td {
-        flex-direction: row;
-        text-align: left;
+    #filter-container select {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .catalog-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .catalog-card img {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .mode-toggle {
+        top: 10px;
+        right: 10px;
     }
 }
