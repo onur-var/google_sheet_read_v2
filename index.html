@@ -1,19 +1,31 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cabin P/N Katalog Uygulaması</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
   <h1>Cabin P/N Katalog Uygulaması</h1>
   <div id="app-container">
-    <input id="search-box" placeholder="Tabloyu ara..." />
+    <input id="search-box" placeholder="Tabloda ara..." />
     <div id="loading-spinner"></div>
-    <div id="no-results">🔍 Sonuç bulunamadı!</div> <!-- YENİ -->
-    <table id="catalog-table">
-      <thead></thead>
-      <tbody></tbody>
-    </table>
+    <div id="no-results">🔍 Sonuç bulunamadı!</div>
+
+    <div class="table-wrapper">
+      <table id="catalog-table">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- Modal yapısı -->
+  <!-- Modal -->
   <div id="image-modal" class="modal">
     <img id="modal-img" class="modal-content" />
   </div>
 
   <script src="app.js"></script>
 </body>
+</html>
