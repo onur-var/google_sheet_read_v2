@@ -7,14 +7,30 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Cabin P/N Katalog Uygulaması</h1>
+  <header>
+    <h1>Cabin P/N Katalog Uygulaması</h1>
+    <button id="theme-toggle" title="Gece/Gündüz Modu">🌙</button>
+  </header>
+
   <div id="app-container">
-    <input id="search-box" placeholder="Tabloyu ara..." />
+    <input id="search-box" placeholder="Malzeme ismi veya Part number ara..." />
+
+    <div id="filters">
+      <select id="kategori-filter">
+        <option value="">Kategori Seç</option>
+      </select>
+
+      <select id="ucak-filter">
+        <option value="">Uçak Tipi Seç</option>
+      </select>
+    </div>
+
     <table id="catalog-table">
       <thead></thead>
       <tbody></tbody>
     </table>
   </div>
+
   <script src="app.js"></script>
 </body>
 </html>
