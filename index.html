@@ -1,20 +1,19 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISL2-Cabin P/N Katalog Programı</title>
-    <link rel="stylesheet" href="style.css">
-</head>
 <body>
-    <h1>Cabin P/N Katalog Uygulaması</h1>
-    <div id="app-container">
-        <input id="search-box" placeholder="Tabloyu ara..." />
-        <table id="catalog-table">
-            <thead></thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <script src="app.js"></script>
+  <h1>Cabin P/N Katalog Uygulaması</h1>
+  <div id="app-container">
+    <input id="search-box" placeholder="Tabloyu ara..." />
+    <div id="loading-spinner"></div>
+    <div id="no-results">🔍 Sonuç bulunamadı!</div> <!-- YENİ -->
+    <table id="catalog-table">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Modal yapısı -->
+  <div id="image-modal" class="modal">
+    <img id="modal-img" class="modal-content" />
+  </div>
+
+  <script src="app.js"></script>
 </body>
-</html>
