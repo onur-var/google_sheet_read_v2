@@ -2,42 +2,19 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ISL2 CABIN TEAM APP</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ISL2-Cabin P/N Katalog Programı</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors">
-
-  <div class="p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold">ISL2 CABIN TEAM APP</h1>
-    <button id="toggleDark" class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 transition">
-      🌙 / ☀️
-    </button>
-  </div>
-
-  <div class="p-4 overflow-x-auto">
-    <table id="dataTable" class="min-w-full table-auto border-collapse">
-      <thead class="bg-gray-200 dark:bg-gray-800">
-        <tr>
-          <th class="p-2 border">Kategori <br><select id="categoryFilter" class="filter-select"></select></th>
-          <th class="p-2 border">Uçak Tipi <br><select id="aircraftTypeFilter" class="filter-select"></select></th>
-          <th class="p-2 border">Malzeme İsmi <br><input type="text" id="locationSearch" class="filter-input"></th>
-          <th class="p-2 border">Part Number <br><input type="text" id="pnSearch" class="filter-input"></th>
-          <th class="p-2 border">Resim</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
+<body>
+  <h1>Cabin P/N Katalog Uygulaması</h1>
+  <div id="app-container">
+    <input id="search-box" placeholder="Tabloyu ara..." />
+    <table id="catalog-table">
+      <thead></thead>
+      <tbody></tbody>
     </table>
   </div>
-
-  <div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-    <img id="modalImage" class="max-h-[90%] max-w-[90%] object-contain" src="" alt="Modal Image">
-  </div>
-
-  <footer class="p-4 text-center text-sm text-gray-400 dark:text-gray-500">
-    Geliştirici: Onur VAR
-  </footer>
-
-  <script src="script.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
