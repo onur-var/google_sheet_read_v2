@@ -1,74 +1,114 @@
-/* Tabloyu flexbox ile hizalama */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+#search-box {
+    width: 90%;
+    max-width: 400px;
+    padding: 8px;
+    margin: 0 auto 20px;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
 #catalog-table {
-  width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
-  background: var(--table-bg);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-  word-wrap: break-word;
-}
-
-#catalog-table th, #catalog-table td {
-  padding: 10px;
-  text-align: left;
-  word-break: break-word;
-  overflow: hidden;
-  display: flex;
-  align-items: center; /* Resim ve metni dikeyde ortalar */
-}
-
-/* Resim ve metin için flex düzeni */
-#catalog-table .image-cell {
-  flex: 0 0 100px; /* Resmin genişliği */
-  padding-right: 10px; /* Resim ve metin arasında boşluk */
-}
-
-#catalog-table .data-cell {
-  flex: 1; /* Metin hücresinin genişliğini dolduracak şekilde */
-}
-
-/* Resimlerin uygun şekilde görünmesi */
-#catalog-table img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  object-fit: contain; /* Resmin orantılı şekilde küçülmesi */
-}
-
-/* Mobil uyumlu tablo görünümü */
-@media screen and (max-width: 600px) {
-  #catalog-table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  #catalog-table thead {
-    display: none; /* Başlıkları gizle */
-  }
-
-  #catalog-table tr {
-    display: block;
-    margin-bottom: 10px;
-  }
-
-  #catalog-table td {
-    display: flex; /* Esnek düzen */
     width: 100%;
-    text-align: left; /* Metni sola hizala */
-    padding: 10px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#catalog-table thead {
+    background-color: #007bff;
+    color: #fff;
+}
+
+#catalog-table thead th {
+    padding: 8px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 14px;
+    word-break: break-word;
+}
+
+#catalog-table tbody tr {
     border-bottom: 1px solid #ddd;
-  }
+    transition: background-color 0.3s;
+}
 
-  #catalog-table td img {
-    max-width: 100px; /* Resim genişliği sınırla */
+#catalog-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+#catalog-table tbody td {
+    padding: 8px;
+    text-align: left;
+    font-size: 13px;
+    vertical-align: middle;
+    word-break: break-word;
+}
+
+#catalog-table tbody td img {
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto;
+    max-width: 70px;
     height: auto;
-    margin-right: 10px; /* Resim ve metin arasına boşluk */
-  }
+}
 
-  #catalog-table td .data-cell {
-    flex: 1; /* Metin hücresini genişlet */
-  }
+#catalog-table tbody td a {
+    text-decoration: none;
+}
+
+thead input {
+    width: 90%;
+    padding: 4px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+select {
+    padding: 6px;
+    font-size: 13px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Mobil uyumluluk */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    #search-box {
+        font-size: 14px;
+    }
+
+    #catalog-table thead th, 
+    #catalog-table tbody td {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    #catalog-table tbody td img {
+        max-width: 60px;
+    }
 }
