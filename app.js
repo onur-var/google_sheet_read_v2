@@ -4,107 +4,133 @@ const RANGE = 'Sayfa1';
 
 async function fetchSheetData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+    document.getElementById('loading-spinner').classList.add('active');
     const response = await fetch(url);
     const data = await response.json();
+    document.getElementById('loading-spinner').classList.remove('active');
     return data.values;
 }
 
-function populateTable(data) {
-    const tbody = document.querySelector("#catalog-table tbody");
-    const thead = document.querySelector("#catalog-table thead");
-    tbody.innerHTML = '';
-    thead.innerHTML = '';
+function populateFilters(data) {
+    const categoryFilter = document.getElementById('category-filter');
+    const aircraftFilter = document.getElementById('aircraft-filter');
 
-    const headers = ["Resim", "Malzeme ismi", "Part number", "Kategori", "Uçak Tipi"];
-    
-    // Table header
-    const headerRow = document.createElement('tr');
-    headers.forEach(header => {
-        const th = document.createElement('th');
-        th.textContent = header;
-        headerRow.appendChild(th);
+    const categories = [...new Set(data.slice(1).map(row => row[2]))];
+    const aircrafts = [...new Set(data.slice(1).map(row => row[3]))];
+
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
     });
-    thead.appendChild(headerRow);
 
-    // Filter row for category and aircraft type
-    const filterRow = document.createElement('tr');
-    const filterCategories = ["Kategori", "Uçak Tipi"];
-    filterCategories.forEach((header, index) => {
-        const td = document.createElement('td');
-        const select = document.createElement('select');
-        const values = Array.from(new Set(data.slice(1).map(row => row[index]))); // Get unique values
-        
-        select.innerHTML = '<option value="">Filtrele</option>';
-        values.forEach(value => {
-            const option = document.createElement('option');
-            option.value = value;
-            option.textContent = value;
-            select.appendChild(option);
-        });
-        select.addEventListener('change', () => filterTableBySelect(select, index));
-
-        td.appendChild(select);
-        filterRow.appendChild(td);
-    });
-    thead.appendChild(filterRow);
-
-    // Populate table rows
-    data.slice(1).forEach(row => {
-        const tr = document.createElement('tr');
-        row.forEach((cell, index) => {
-            const td = document.createElement('td');
-            if (index === 4) {
-                const fileId = cell.split('/')[5];
-                const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
-                const originalUrl = `https://drive.google.com/file/d/${fileId}/view`;
-
-                const link = document.createElement('a');
-                link.href = originalUrl;
-                link.target = '_blank';
-
-                const img = document.createElement('img');
-                img.src = thumbnailUrl;
-                img.alt = 'Catalog Image';
-                img.style.width = '100px';
-                img.style.height = 'auto';
-                link.appendChild(img);
-
-                td.appendChild(link);
-            } else {
-                const div = document.createElement('div');
-                const span = document.createElement('span');
-                span.textContent = cell;
-                div.appendChild(span);
-                td.appendChild(div);
-            }
-            tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
+    aircrafts.forEach(aircraft => {
+        const option = document.createElement('option');
+        option.value = aircraft;
+        option.textContent = aircraft;
+        aircraftFilter.appendChild(option);
     });
 }
 
-function filterTableBySelect(select, index) {
-    const value = select.value.toLowerCase();
-    const rows = document.querySelectorAll("#catalog-table tbody tr");
+function populateCatalog(data) {
+    const container = document.getElementById('catalog-container');
+    container.innerHTML = '';
 
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        const cellValue = cells[index].textContent.toLowerCase();
-        row.style.display = cellValue.includes(value) || !value ? '' : 'none';
+    data.slice(1).forEach(row => {
+        const card = document.createElement('div');
+        card.className = 'catalog-card';
+
+        const imgDiv = document.createElement('div');
+        const fileId = row[4].split('/')[5];
+        const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
+        const originalUrl = `https://drive.google.com/file/d/${fileId}/view`;
+
+        const link = document.createElement('a');
+        link.href = originalUrl;
+        link.target = '_blank';
+
+        const img = document.createElement('img');
+        img.src = thumbnailUrl;
+        img.alt = 'Catalog Image';
+        link.appendChild(img);
+        imgDiv.appendChild(link);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'card-content';
+
+        const fields = [
+            { label: 'Malzeme İsmi', value: row[0] },
+            { label: 'Part Number', value: row[1] },
+            { label: 'Kategori', value: row[2] },
+            { label: 'Uçak Tipi', value: row[3] }
+        ];
+
+        fields.forEach(field => {
+            const div = document.createElement('div');
+            div.innerHTML = `<strong>${field.label}:</strong> ${field.value}`;
+            contentDiv.appendChild(div);
+        });
+
+        card.appendChild(imgDiv);
+        card.appendChild(contentDiv);
+        container.appendChild(card);
     });
+}
+
+function filterCatalog() {
+    const searchQuery = document.getElementById('search-box').value.toLowerCase();
+    const categoryFilter = document.getElementById('category-filter').value;
+    const aircraftFilter = document.getElementById('aircraft-filter').value;
+    const cards = document.querySelectorAll('.catalog-card');
+
+    cards.forEach(card => {
+        const content = card.querySelector('.card-content');
+        const malzeme = content.children[0].textContent.toLowerCase();
+        const partNo = content.children[1].textContent.toLowerCase();
+        const kategori = content.children[2].textContent;
+        const ucakTipi = content.children[3].textContent;
+
+        const searchMatch = !searchQuery || 
+            malzeme.includes(searchQuery) || 
+            partNo.includes(searchQuery);
+
+        const categoryMatch = !categoryFilter || kategori.includes(categoryFilter);
+        const aircraftMatch = !aircraftFilter || ucakTipi.includes(aircraftFilter);
+
+        card.style.display = searchMatch && categoryMatch && aircraftMatch ? '' : 'none';
+    });
+}
+
+function toggleMode() {
+    const body = document.body;
+    const button = document.getElementById('mode-toggle-btn');
+    if (body.classList.contains('light-mode')) {
+        body.classList.remove('light-mode');
+        body.classList.add('dark-mode');
+        button.textContent = 'Gündüz Modu';
+    } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+        button.textContent = 'Gece Modu';
+    }
 }
 
 function init() {
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('change', (e) => {
-        if (e.target.checked) {
-            document.body.classList.add('dark-mode');
-        } else {
-            document.body.classList.remove('dark-mode');
-        }
-    });
+    const searchBox = document.getElementById('search-box');
+    const categoryFilter = document.getElementById('category-filter');
+    const aircraftFilter = document.getElementById('aircraft-filter');
+    const modeToggleBtn = document.getElementById('mode-toggle-btn');
 
-    fetchSheetData().then(data => populateTable(data));
+    searchBox.addEventListener('input', filterCatalog);
+    categoryFilter.addEventListener('change', filterCatalog);
+    aircraftFilter.addEventListener('change', filterCatalog);
+    modeToggleBtn.addEventListener('click', toggleMode);
+
+    fetchSheetData().then(data => {
+        populateFilters(data);
+        populateCatalog(data);
+    });
 }
 
 init();
