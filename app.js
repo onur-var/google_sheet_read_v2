@@ -28,12 +28,18 @@ function populateTable(data) {
     const filterRow = document.createElement('tr');
     headers.forEach((header, index) => {
         const td = document.createElement('td');
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.placeholder = "Filtrele...";
-        input.dataset.index = index;
-        input.addEventListener('input', filterTableByInputs);
-        td.appendChild(input);
+
+        // SADECE "Malzeme ismi" ve "Part number" için kutucuk ekle
+        if (index === 0 || index === 1) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = "Ara...";
+            input.dataset.index = index;
+
+            input.addEventListener('input', filterTableByInputs);
+
+            td.appendChild(input);
+        }
         filterRow.appendChild(td);
     });
     thead.appendChild(filterRow);
@@ -43,18 +49,23 @@ function populateTable(data) {
         row.forEach((cell, index) => {
             const td = document.createElement('td');
 
-            if (index === 4 && cell.includes('drive.google.com')) {
+            if (index === 4) {
                 const fileId = cell.split('/')[5];
                 const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
-                const originalUrl = `https://drive.google.com/uc?id=${fileId}`;
+                const originalUrl = `https://drive.google.com/file/d/${fileId}/view`;
+
+                const link = document.createElement('a');
+                link.href = originalUrl;
+                link.target = '_blank';
 
                 const img = document.createElement('img');
                 img.src = thumbnailUrl;
                 img.alt = 'Catalog Image';
-                img.style.cursor = 'pointer';
-                img.addEventListener('click', () => openModal(originalUrl));
+                img.style.width = '70px';
+                img.style.height = 'auto';
+                link.appendChild(img);
 
-                td.appendChild(img);
+                td.appendChild(link);
             } else {
                 td.textContent = cell;
             }
@@ -69,70 +80,33 @@ function filterTableByInputs() {
     const inputs = document.querySelectorAll("thead input");
     const filters = Array.from(inputs).map(input => input.value.toLowerCase());
     const rows = document.querySelectorAll("#catalog-table tbody tr");
-    const noResults = document.getElementById('no-results');
-
-    let visibleCount = 0;
 
     rows.forEach(row => {
         const cells = row.querySelectorAll('td');
         let match = true;
         filters.forEach((filter, i) => {
             const index = inputs[i].dataset.index;
-            if (filter && (!cells[index] || !cells[index].innerText.toLowerCase().includes(filter))) {
+            if (filter && !cells[index].innerText.toLowerCase().includes(filter)) {
                 match = false;
             }
         });
-
-        if (match) {
-            row.style.display = '';
-            visibleCount++;
-        } else {
-            row.style.display = 'none';
-        }
+        row.style.display = match ? '' : 'none';
     });
-
-    noResults.style.display = visibleCount === 0 ? 'block' : 'none';
-}
-
-function openModal(imgSrc) {
-    const modal = document.getElementById('image-modal');
-    const modalImg = document.getElementById('modal-img');
-    modalImg.src = imgSrc;
-    modal.style.animation = 'zoomIn 0.5s'; // Zoom animasyonu
-    modal.style.display = 'block';
-}
-
-function closeModal() {
-    const modal = document.getElementById('image-modal');
-    modal.style.display = 'none';
 }
 
 function init() {
     const searchBox = document.getElementById('search-box');
     searchBox.addEventListener('input', (e) => filterTableBySearch(e.target.value));
 
-    const modal = document.getElementById('image-modal');
-    modal.addEventListener('click', closeModal);
-
     fetchSheetData().then(data => populateTable(data));
 }
 
 function filterTableBySearch(query) {
     const rows = document.querySelectorAll("#catalog-table tbody tr");
-    const noResults = document.getElementById('no-results');
-    let visibleCount = 0;
-
     rows.forEach(row => {
         const text = row.innerText.toLowerCase();
-        if (text.includes(query.toLowerCase())) {
-            row.style.display = '';
-            visibleCount++;
-        } else {
-            row.style.display = 'none';
-        }
+        row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
     });
-
-    noResults.style.display = visibleCount === 0 ? 'block' : 'none';
 }
 
 init();
