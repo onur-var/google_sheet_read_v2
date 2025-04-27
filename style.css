@@ -64,7 +64,6 @@ h1 {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    /*max-width: 800px;*/
     width: 90%;
     margin: 0 auto;
 }
@@ -117,7 +116,7 @@ body.dark-mode .catalog-card {
 }
 
 #mode-toggle-btn {
-    padding: 8px 16px;
+    padding: 6px 12px;
     font-size: 14px;
     border: none;
     border-radius: 5px;
@@ -148,14 +147,15 @@ body.dark-mode .catalog-card {
     100% { transform: rotate(360deg); }
 }
 
-.header-buttons {
+.header-menu {
+    position: relative;
     display: flex;
-    gap: 10px;
+    justify-content: center;
     margin-bottom: 15px;
 }
 
-.header-buttons button {
-    padding: 8px 12px;
+#menu-toggle-btn {
+    padding: 6px 12px;
     font-size: 14px;
     border: none;
     border-radius: 5px;
@@ -165,7 +165,47 @@ body.dark-mode .catalog-card {
     transition: background-color 0.3s;
 }
 
-.header-buttons button:hover {
+#menu-toggle-btn:hover {
+    background-color: #0056b3;
+}
+
+.menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    z-index: 1000;
+    transition: opacity 0.3s;
+}
+
+body.dark-mode .menu-dropdown {
+    background-color: #333;
+}
+
+.menu-dropdown.hidden {
+    display: none;
+}
+
+.menu-dropdown button {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    text-align: left;
+}
+
+.menu-dropdown button:hover {
     background-color: #0056b3;
 }
 
@@ -194,17 +234,6 @@ body.dark-mode .catalog-card {
         font-size: 20px;
     }
 
-        .header-buttons {
-        flex-direction: column;
-        width: 100%;
-        align-items: center;
-    }
-
-        .header-buttons button {
-        width: 100%;
-        max-width: 200px;
-    }
-
     #search-box {
         font-size: 14px;
     }
@@ -220,27 +249,53 @@ body.dark-mode .catalog-card {
     }
 
     .catalog-card {
-        flex-direction: row !important; /* Kesinlikle satır düzeni */
+        flex-direction: row !important;
         align-items: flex-start;
         text-align: left;
-        padding: 10px; /* Daha kompakt bir padding */
+        padding: 10px;
     }
 
     .catalog-card img {
         width: 80px;
         height: auto;
-        margin-right: 10px !important; /* Sağ boşluk kesinlikle uygulanacak */
-        margin-bottom: 0 !important; /* Alt boşluk kesinlikle kaldırılacak */
-        min-width: 80px; /* Resmin küçülmesini engelle */
+        margin-right: 10px !important;
+        margin-bottom: 0 !important;
+        min-width: 80px;
     }
 
     .catalog-card .card-content {
-        flex: 1; /* Kalan alanı doldur */
-        min-width: 0; /* Taşmayı engelle */
+        flex: 1;
+        min-width: 0;
     }
 
     .mode-toggle {
         top: 10px;
         right: 10px;
+    }
+
+    .header-menu {
+        margin-bottom: 10px;
+    }
+
+    #menu-toggle-btn {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+
+    .menu-dropdown {
+        width: 150px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .catalog-card {
+        flex-direction: column !important;
+    }
+
+    .catalog-card img {
+        width: 100%;
+        max-width: 150px;
+        margin-right: 0 !important;
+        margin-bottom: 10px !important;
     }
 }
