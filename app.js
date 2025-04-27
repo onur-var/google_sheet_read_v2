@@ -16,7 +16,8 @@ function populateTable(data) {
     thead.innerHTML = '';
 
     const headers = ["Malzeme ismi", "Part number", "Kategori", "Uçak Tipi", "Resim"];
-
+    
+    // Table header
     const headerRow = document.createElement('tr');
     headers.forEach(header => {
         const th = document.createElement('th');
@@ -25,30 +26,33 @@ function populateTable(data) {
     });
     thead.appendChild(headerRow);
 
+    // Filter row for category and aircraft type
     const filterRow = document.createElement('tr');
-    headers.forEach((header, index) => {
+    const filterCategories = ["Kategori", "Uçak Tipi"];
+    filterCategories.forEach((header, index) => {
         const td = document.createElement('td');
+        const select = document.createElement('select');
+        const values = Array.from(new Set(data.slice(1).map(row => row[index]))); // Get unique values
+        
+        select.innerHTML = '<option value="">Filtrele</option>';
+        values.forEach(value => {
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = value;
+            select.appendChild(option);
+        });
+        select.addEventListener('change', () => filterTableBySelect(select, index));
 
-        // SADECE "Malzeme ismi" ve "Part number" için kutucuk ekle
-        if (index === 0 || index === 1) {
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.placeholder = "Ara...";
-            input.dataset.index = index;
-
-            input.addEventListener('input', filterTableByInputs);
-
-            td.appendChild(input);
-        }
+        td.appendChild(select);
         filterRow.appendChild(td);
     });
     thead.appendChild(filterRow);
 
+    // Populate table rows
     data.slice(1).forEach(row => {
         const tr = document.createElement('tr');
         row.forEach((cell, index) => {
             const td = document.createElement('td');
-
             if (index === 4) {
                 const fileId = cell.split('/')[5];
                 const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
@@ -61,7 +65,7 @@ function populateTable(data) {
                 const img = document.createElement('img');
                 img.src = thumbnailUrl;
                 img.alt = 'Catalog Image';
-                img.style.width = '70px';
+                img.style.width = '100px';
                 img.style.height = 'auto';
                 link.appendChild(img);
 
@@ -69,44 +73,34 @@ function populateTable(data) {
             } else {
                 td.textContent = cell;
             }
-
             tr.appendChild(td);
         });
         tbody.appendChild(tr);
     });
 }
 
-function filterTableByInputs() {
-    const inputs = document.querySelectorAll("thead input");
-    const filters = Array.from(inputs).map(input => input.value.toLowerCase());
+function filterTableBySelect(select, index) {
+    const value = select.value.toLowerCase();
     const rows = document.querySelectorAll("#catalog-table tbody tr");
 
     rows.forEach(row => {
         const cells = row.querySelectorAll('td');
-        let match = true;
-        filters.forEach((filter, i) => {
-            const index = inputs[i].dataset.index;
-            if (filter && !cells[index].innerText.toLowerCase().includes(filter)) {
-                match = false;
-            }
-        });
-        row.style.display = match ? '' : 'none';
+        const cellValue = cells[index].textContent.toLowerCase();
+        row.style.display = cellValue.includes(value) || !value ? '' : 'none';
     });
 }
 
 function init() {
-    const searchBox = document.getElementById('search-box');
-    searchBox.addEventListener('input', (e) => filterTableBySearch(e.target.value));
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+    });
 
     fetchSheetData().then(data => populateTable(data));
-}
-
-function filterTableBySearch(query) {
-    const rows = document.querySelectorAll("#catalog-table tbody tr");
-    rows.forEach(row => {
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
-    });
 }
 
 init();
