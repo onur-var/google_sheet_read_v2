@@ -104,15 +104,25 @@ function filterCatalog() {
 
 function toggleMode() {
     const body = document.body;
-    const button = document.getElementById('mode-toggle-btn');
-        if (body.classList.contains('light-mode')) {
+    if (body.classList.contains('light-mode')) {
         body.classList.remove('light-mode');
         body.classList.add('dark-mode');
     } else {
         body.classList.remove('dark-mode');
         body.classList.add('light-mode');
     }
+}
 
+function showDeveloperPopup() {
+    const popup = document.getElementById('developer-popup');
+    popup.classList.add('show');
+    setTimeout(() => {
+        popup.classList.remove('show');
+    }, 2000); // Hide after 2 seconds
+}
+
+function openSheet() {
+    window.open('https://docs.google.com/spreadsheets/d/16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk/edit?usp=sharing', '_blank');
 }
 
 function init() {
@@ -120,11 +130,15 @@ function init() {
     const categoryFilter = document.getElementById('category-filter');
     const aircraftFilter = document.getElementById('aircraft-filter');
     const modeToggleBtn = document.getElementById('mode-toggle-btn');
+    const developerBtn = document.getElementById('developer-btn');
+    const sheetBtn = document.getElementById('sheet-btn');
 
     searchBox.addEventListener('input', filterCatalog);
     categoryFilter.addEventListener('change', filterCatalog);
     aircraftFilter.addEventListener('change', filterCatalog);
     modeToggleBtn.addEventListener('click', toggleMode);
+    developerBtn.addEventListener('click', showDeveloperPopup);
+    sheetBtn.addEventListener('click', openSheet);
 
     fetchSheetData().then(data => {
         populateFilters(data);
