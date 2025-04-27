@@ -5,10 +5,18 @@ const RANGE = 'Sayfa1';
 async function fetchSheetData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
     document.getElementById('loading-spinner').classList.add('active');
-    const response = await fetch(url);
-    const data = await response.json();
-    document.getElementById('loading-spinner').classList.remove('active');
-    return data.values;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Veri alınamadı');
+        const data = await response.json();
+        return data.values;
+    } catch (error) {
+        console.error('Hata:', error);
+        alert('Veriler yüklenirken bir hata oluştu.');
+        return [];
+    } finally {
+        document.getElementById('loading-spinner').classList.remove('active');
+    }
 }
 
 function populateFilters(data) {
@@ -116,20 +124,47 @@ function toggleMode() {
     }
 }
 
+function toggleMenu() {
+    const menu = document.getElementById('menu-dropdown');
+    menu.classList.toggle('hidden');
+}
+
+function showDeveloperPopup() {
+    const popup = document.getElementById('developer-popup');
+    popup.classList.remove('hidden');
+    popup.classList.add('show');
+    setTimeout(() => {
+        popup.classList.remove('show');
+        popup.classList.add('hidden');
+    }, 2000);
+}
+
+function openSheet() {
+    window.open(`https://docs.google.com/spreadsheets/d/${SHEET_ID}`, '_blank');
+}
+
 function init() {
     const searchBox = document.getElementById('search-box');
     const categoryFilter = document.getElementById('category-filter');
     const aircraftFilter = document.getElementById('aircraft-filter');
     const modeToggleBtn = document.getElementById('mode-toggle-btn');
+    const menuToggleBtn = document.getElementById('menu-toggle-btn');
+    const developerBtn = document.getElementById('developer-btn');
+    const sheetBtn = document.getElementById('sheet-btn');
 
     searchBox.addEventListener('input', filterCatalog);
     categoryFilter.addEventListener('change', filterCatalog);
     aircraftFilter.addEventListener('change', filterCatalog);
     modeToggleBtn.addEventListener('click', toggleMode);
+    menuToggleBtn.addEventListener('click', toggleMenu);
+    developerBtn.addEventListener('click', showDeveloperPopup);
+    sheetBtn.addEventListener('click', openSheet);
 
     fetchSheetData().then(data => {
-        populateFilters(data);
-        populateCatalog(data);
+        if (data.length > 0) {
+            populateFilters(data);
+            populateCatalog(data);
+        }
     });
 }
 
