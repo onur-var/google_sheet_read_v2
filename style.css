@@ -60,75 +60,36 @@ h1 {
     outline: none;
 }
 
-#catalog-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    /*max-width: 800px;*/
-    width: 90%;
-    margin: 0 auto;
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
-.catalog-card {
-    display: flex;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    animation: fadeIn 0.5s ease-in;
+.header-left {
+  flex: 1;
+  min-width: 200px;
 }
 
-body.dark-mode .catalog-card {
-    background: #333;
+.header-right {
+  display: flex;
+  gap: 8px;
 }
 
-.catalog-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+  color: inherit;
+  transition: transform 0.2s;
 }
 
-.catalog-card img {
-    width: 100px;
-    height: auto;
-    border-radius: 5px;
-    margin-right: 20px;
-}
-
-.catalog-card .card-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.catalog-card .card-content div {
-    margin: 5px 0;
-    font-size: 14px;
-}
-
-.catalog-card .card-content div strong {
-    color: #007bff;
-}
-
-.mode-toggle {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-}
-
-#mode-toggle-btn {
-    padding: 8px 16px;
-    font-size: 14px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#mode-toggle-btn:hover {
-    background-color: #0056b3;
+.icon-btn:hover {
+  transform: scale(1.1);
 }
 
 #loading-spinner {
@@ -190,20 +151,15 @@ body.dark-mode .catalog-card {
 
 /* Mobile compatibility */
 @media screen and (max-width: 768px) {
-    h1 {
-        font-size: 20px;
-    }
-
-        .header-buttons {
-        flex-direction: column;
-        width: 100%;
-        align-items: center;
-    }
-
-        .header-buttons button {
-        width: 100%;
-        max-width: 200px;
-    }
+  .header-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .header-right {
+    align-self: flex-end;
+  }
+}
 
     #search-box {
         font-size: 14px;
