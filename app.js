@@ -59,13 +59,9 @@ function populateCatalog(data) {
         let imgUrl = '';
         if (row[5] && row[5].includes('drive.google.com')) {
             const fileId = row[5].split('/')[5];
-            // Mobil cihazlar için optimize edilmiş boyut
-            const isMobile = window.matchMedia("(max-width: 768px)").matches;
-            imgUrl = isMobile 
-                ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w${screen.width}-h${Math.round(screen.width*0.75)}-c`
-                : `https://drive.google.com/thumbnail?id=${fileId}&sz=w400-h200-c`;
+            imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400-h200-c`;
         } else {
-            imgUrl = 'https://via.placeholder.com/400x300.png?text=Resim+Yok';
+            imgUrl = 'https://via.placeholder.com/400x200.png?text=Resim+Yok';
         }
 
         const link = document.createElement('a');
@@ -81,15 +77,11 @@ function populateCatalog(data) {
         img.src = imgUrl;
         img.alt = 'Ürün Görseli';
         img.loading = 'lazy';
-        img.style.width = '100%';
-        img.style.height = 'auto';
+        img.style.maxWidth = '100%';
+        img.style.maxHeight = '100%';
         img.style.objectFit = 'contain';
         link.appendChild(img);
         imgDiv.appendChild(link);
-
-        // ... (card-content kısmı aynı kalacak)
-    });
-}
 
         // Content section
         const contentDiv = document.createElement('div');
