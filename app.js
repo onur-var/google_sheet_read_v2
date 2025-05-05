@@ -42,7 +42,8 @@ function populateCatalog(data) {
         card.className = 'catalog-card';
 
         const imgDiv = document.createElement('div');
-        const fileId = row[4].split('/')[5];
+        // Resim linki şimdi 5. sütunda (F)
+        const fileId = row[5].split('/')[5];
         const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
         const originalUrl = `https://drive.google.com/file/d/${fileId}/view`;
 
@@ -59,11 +60,13 @@ function populateCatalog(data) {
         const contentDiv = document.createElement('div');
         contentDiv.className = 'card-content';
 
+        // Not alanı 4. sütun (E) olarak eklendi
         const fields = [
             { label: 'Malzeme İsmi', value: row[0] },
             { label: 'Part Number', value: row[1] },
             { label: 'Kategori', value: row[2] },
-            { label: 'Uçak Tipi', value: row[3] }
+            { label: 'Uçak Tipi', value: row[3] },
+            { label: 'Not', value: row[4] }
         ];
 
         fields.forEach(field => {
@@ -90,10 +93,12 @@ function filterCatalog() {
         const partNo = content.children[1].textContent.toLowerCase();
         const kategori = content.children[2].textContent;
         const ucakTipi = content.children[3].textContent;
+        const not = content.children[4].textContent.toLowerCase(); // Not eklendi
 
         const searchMatch = !searchQuery || 
             malzeme.includes(searchQuery) || 
-            partNo.includes(searchQuery);
+            partNo.includes(searchQuery) ||
+            not.includes(searchQuery); // Not aramaya dahil edildi
 
         const categoryMatch = !categoryFilter || kategori.includes(categoryFilter);
         const aircraftMatch = !aircraftFilter || ucakTipi.includes(aircraftFilter);
@@ -118,7 +123,7 @@ function showDeveloperPopup() {
     popup.classList.add('show');
     setTimeout(() => {
         popup.classList.remove('show');
-    }, 2000); // Hide after 2 seconds
+    }, 2000);
 }
 
 function openSheet() {
