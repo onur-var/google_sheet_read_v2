@@ -150,13 +150,11 @@ body.dark-mode .catalog-card img {
 }
 
 .card-image {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 200px; /* Sabit yükseklik */
-  overflow: hidden;
-  background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    overflow: hidden;
 }
 
 body.dark-mode .card-image {
@@ -209,20 +207,14 @@ body.dark-mode .card-image {
   }
 }
 
-@media screen and (max-width: 768px) {
-  .card-image {
-    height: auto !important; /* Sabit yüksekliği kaldırıyoruz */
-    min-height: 150px; /* Minimum yükseklik belirliyoruz */
-    max-height: 250px; /* Maksimum yükseklik sınırı */
-  }
-  
-  .catalog-card img {
-    width: 100% !important;
-    height: auto !important;
-    max-height: none !important;
-    object-fit: contain !important;
-    padding: 5px;
-  }
+@media screen and (max-width: 480px) {
+    .card-image {
+        min-height: 120px;
+    }
+    .catalog-card img {
+        padding: 3px;
+    }
+}
   
   .catalog-card {
     flex-direction: column;
