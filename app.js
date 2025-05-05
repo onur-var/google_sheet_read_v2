@@ -74,15 +74,15 @@ if (row[5] && row[5].includes('drive.google.com')) {
         link.style.alignItems = 'center';
         link.style.height = '100%';
 
-        const img = document.createElement('img');
-        img.src = imgUrl;
-        img.alt = 'Ürün Görseli';
-        img.loading = 'lazy';
-        img.style.maxWidth = '100%';
-        img.style.maxHeight = '100%';
-        img.style.objectFit = 'contain';
-        link.appendChild(img);
-        imgDiv.appendChild(link);
+const img = document.createElement('img');
+img.src = imgUrl;
+img.alt = 'Ürün Görseli';
+img.loading = 'lazy';
+img.style.width = 'auto';
+img.style.height = 'auto';
+img.style.maxWidth = '100%';
+img.style.maxHeight = '100%';
+img.style.objectFit = 'contain';
 
         // Content section
         const contentDiv = document.createElement('div');
