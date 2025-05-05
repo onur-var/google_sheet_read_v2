@@ -1,7 +1,7 @@
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
-  padding: 15px;
+  padding: 20px;
   transition: background-color 0.3s, color 0.3s;
 }
 
@@ -129,25 +129,20 @@ body.dark-mode .catalog-card {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
-.card-image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
-  overflow: hidden;
-  background-color: #f5f5f5;
-  padding: 10px;
-}
-
-body.dark-mode .card-image {
-  background-color: #2a2a2a;
-}
-
 .catalog-card img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  border-radius: 4px;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+  transition: transform 0.3s;
+}
+
+body.dark-mode .catalog-card img {
+  border-bottom-color: #444;
+}
+
+.catalog-card:hover img {
+  transform: scale(1.03);
 }
 
 .catalog-card .card-content {
@@ -227,63 +222,31 @@ body.dark-mode .catalog-card .card-content div {
 
 /* Mobile Responsiveness */
 @media screen and (max-width: 768px) {
-  body {
-    padding: 10px;
-  }
-  
   .header-container {
     flex-direction: column;
     gap: 15px;
-    align-items: stretch;
   }
   
   .header-right {
-    justify-content: flex-end;
-    padding-top: 10px;
+    align-self: flex-end;
   }
   
   #catalog-container {
     grid-template-columns: 1fr;
     gap: 15px;
-    width: 100%;
-    padding: 5px;
   }
   
   #filter-container {
     flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
+    align-items: center;
   }
   
   #filter-container select {
     width: 100%;
-    max-width: none;
+    max-width: 300px;
   }
   
-  .card-image {
-    height: 180px;
-  }
-  
-  .catalog-card {
-    margin-bottom: 10px;
-  }
-  
-  .catalog-card .card-content div {
-    font-size: 13px;
-  }
-  
-  .catalog-card .card-content div strong {
-    min-width: 90px;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .card-image {
+  .catalog-card img {
     height: 160px;
-  }
-  
-  #search-box {
-    font-size: 14px;
-    padding: 10px;
   }
 }
