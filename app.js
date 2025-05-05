@@ -59,27 +59,19 @@ function populateCatalog(data) {
         let imgUrl = '';
         if (row[5] && row[5].includes('drive.google.com')) {
             const fileId = row[5].split('/')[5];
-            imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400-h200-c`;
+            imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
         } else {
-            imgUrl = 'https://via.placeholder.com/400x200.png?text=Resim+Yok';
+            imgUrl = 'https://via.placeholder.com/400x300?text=Resim+Yok';
         }
 
         const link = document.createElement('a');
         link.href = row[5] || '#';
         link.target = '_blank';
-        link.style.display = 'flex';
-        link.style.justifyContent = 'center';
-        link.style.alignItems = 'center';
-        link.style.height = '100%';
-        link.style.width = '100%';
 
         const img = document.createElement('img');
         img.src = imgUrl;
         img.alt = 'Ürün Görseli';
         img.loading = 'lazy';
-        img.style.maxWidth = '100%';
-        img.style.maxHeight = '100%';
-        img.style.objectFit = 'contain';
         link.appendChild(img);
         imgDiv.appendChild(link);
 
