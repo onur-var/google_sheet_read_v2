@@ -43,6 +43,11 @@ function populateCatalog(data) {
     const container = document.getElementById('catalog-container');
     container.innerHTML = '';
 
+    if (!data || data.length < 2) {
+        container.innerHTML = '<p style="grid-column:1/-1;text-align:center;">Gösterilecek veri bulunamadı</p>';
+        return;
+    }
+
     data.slice(1).forEach(row => {
         const card = document.createElement('div');
         card.className = 'catalog-card';
@@ -54,10 +59,8 @@ function populateCatalog(data) {
         let imgUrl = '';
         if (row[5] && row[5].includes('drive.google.com')) {
             const fileId = row[5].split('/')[5];
-            // Daha kaliteli ve uygun boyutlu thumbnail için parametreler
             imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400-h200-c`;
         } else {
-            // Placeholder resmi
             imgUrl = 'https://via.placeholder.com/400x200.png?text=Resim+Yok';
         }
 
@@ -68,6 +71,7 @@ function populateCatalog(data) {
         link.style.justifyContent = 'center';
         link.style.alignItems = 'center';
         link.style.height = '100%';
+        link.style.width = '100%';
 
         const img = document.createElement('img');
         img.src = imgUrl;
