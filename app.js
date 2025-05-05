@@ -47,17 +47,19 @@ function populateCatalog(data) {
         const card = document.createElement('div');
         card.className = 'catalog-card';
 
-        // Image section
+        // Resim bölümü - Mobil uyumlu hale getirildi
         const imgDiv = document.createElement('div');
         imgDiv.className = 'card-image';
         
         let imgUrl = '';
         if (row[5] && row[5].includes('drive.google.com')) {
             const fileId = row[5].split('/')[5];
-            // Daha kaliteli ve uygun boyutlu thumbnail için parametreler
-            imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400-h200-c`;
+            // Mobil cihazlar için optimize edilmiş boyut
+            const isMobile = window.matchMedia("(max-width: 768px)").matches;
+            imgUrl = isMobile 
+                ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w300-h150-c` 
+                : `https://drive.google.com/thumbnail?id=${fileId}&sz=w400-h200-c`;
         } else {
-            // Placeholder resmi
             imgUrl = 'https://via.placeholder.com/400x200.png?text=Resim+Yok';
         }
 
@@ -65,19 +67,22 @@ function populateCatalog(data) {
         link.href = row[5] || '#';
         link.target = '_blank';
         link.style.display = 'flex';
+        link.style.height = '100%';
+        link.style.width = '100%';
         link.style.justifyContent = 'center';
         link.style.alignItems = 'center';
-        link.style.height = '100%';
 
         const img = document.createElement('img');
         img.src = imgUrl;
         img.alt = 'Ürün Görseli';
         img.loading = 'lazy';
-        img.style.maxWidth = '100%';
         img.style.maxHeight = '100%';
+        img.style.maxWidth = '100%';
         img.style.objectFit = 'contain';
+        
         link.appendChild(img);
         imgDiv.appendChild(link);
+        card.appendChild(imgDiv);
 
         // Content section
         const contentDiv = document.createElement('div');
