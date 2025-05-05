@@ -47,39 +47,46 @@ function populateCatalog(data) {
         const card = document.createElement('div');
         card.className = 'catalog-card';
 
-        // Resim bölümü - Mobil uyumlu hale getirildi
+        // Resim bölümü - Mobil uyumlu
         const imgDiv = document.createElement('div');
         imgDiv.className = 'card-image';
         
         let imgUrl = '';
         if (row[5] && row[5].includes('drive.google.com')) {
             const fileId = row[5].split('/')[5];
-            // Mobil cihazlar için optimize edilmiş boyut
-            const isMobile = window.matchMedia("(max-width: 768px)").matches;
-            imgUrl = isMobile 
-                ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w300-h150-c` 
-                : `https://drive.google.com/thumbnail?id=${fileId}&sz=w400-h200-c`;
+            // Mobil cihazlarda farklı boyut
+            const isMobile = window.innerWidth <= 768;
+            imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=${isMobile ? 'w300-h300' : 'w400-h400'}`;
         } else {
-            imgUrl = 'https://via.placeholder.com/400x200.png?text=Resim+Yok';
+            imgUrl = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"%3E%3Crect fill="%23f5f5f5" width="400" height="300"/%3E%3Ctext fill="%23000" font-family="Arial" font-size="18" dy=".5em" text-anchor="middle" x="200" y="150"%3EResim Yok%3C/text%3E%3C/svg%3E';
         }
 
-        const link = document.createElement('a');
-        link.href = row[5] || '#';
-        link.target = '_blank';
-        link.style.display = 'flex';
-        link.style.height = '100%';
-        link.style.width = '100%';
-        link.style.justifyContent = 'center';
-        link.style.alignItems = 'center';
-
-        const img = document.createElement('img');
+        const img = new Image();
         img.src = imgUrl;
         img.alt = 'Ürün Görseli';
         img.loading = 'lazy';
         img.style.maxHeight = '100%';
         img.style.maxWidth = '100%';
         img.style.objectFit = 'contain';
-        
+        img.onload = function() {
+            // Resim yüklendikten sonra boyut ayarı
+            if (this.naturalHeight > this.naturalWidth) {
+                this.style.width = 'auto';
+                this.style.height = '100%';
+            } else {
+                this.style.width = '100%';
+                this.style.height = 'auto';
+            }
+        };
+
+        const link = document.createElement('a');
+        link.href = row[5] || '#';
+        link.target = '_blank';
+        link.style.display = 'flex';
+        link.style.justifyContent = 'center';
+        link.style.alignItems = 'center';
+        link.style.height = '100%';
+        link.style.width = '100%';
         link.appendChild(img);
         imgDiv.appendChild(link);
         card.appendChild(imgDiv);
