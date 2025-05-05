@@ -42,7 +42,7 @@ function populateCatalog(data) {
         card.className = 'catalog-card';
 
         const imgDiv = document.createElement('div');
-        // Resim linki şimdi 5. sütunda (F)
+        // Resim linki şimdi 6. sütunda (F)
         const fileId = row[5].split('/')[5];
         const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
         const originalUrl = `https://drive.google.com/file/d/${fileId}/view`;
@@ -60,7 +60,7 @@ function populateCatalog(data) {
         const contentDiv = document.createElement('div');
         contentDiv.className = 'card-content';
 
-        // Not alanı 4. sütun (E) olarak eklendi
+        // Not alanı 5. sütun (E) olarak eklendi
         const fields = [
             { label: 'Malzeme İsmi', value: row[0] },
             { label: 'Part Number', value: row[1] },
