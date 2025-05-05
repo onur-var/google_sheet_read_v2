@@ -226,6 +226,7 @@ body.dark-mode .catalog-card .card-content div {
 }
 
 /* Mobile Responsiveness */
+/* Mobile Responsiveness */
 @media screen and (max-width: 768px) {
   body {
     padding: 10px;
@@ -261,7 +262,17 @@ body.dark-mode .catalog-card .card-content div {
   }
   
   .card-image {
-    height: 180px;
+    height: auto; /* Sabit yükseklik kaldırıldı */
+    min-height: 150px;
+    aspect-ratio: 16/9; /* Resim oranını koru */
+    padding: 5px;
+  }
+  
+  .catalog-card img {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
   }
   
   .catalog-card {
@@ -279,7 +290,8 @@ body.dark-mode .catalog-card .card-content div {
 
 @media screen and (max-width: 480px) {
   .card-image {
-    height: 160px;
+    min-height: 120px;
+    aspect-ratio: 4/3; /* Mobilde daha uygun oran */
   }
   
   #search-box {
