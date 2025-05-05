@@ -5,10 +5,16 @@ const RANGE = 'Sayfa1';
 async function fetchSheetData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
     document.getElementById('loading-spinner').classList.add('active');
-    const response = await fetch(url);
-    const data = await response.json();
-    document.getElementById('loading-spinner').classList.remove('active');
-    return data.values;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.values;
+    } catch (error) {
+        console.error('Veri alınırken hata oluştu:', error);
+        return null;
+    } finally {
+        document.getElementById('loading-spinner').classList.remove('active');
+    }
 }
 
 function populateFilters(data) {
@@ -37,41 +43,53 @@ function populateCatalog(data) {
     const container = document.getElementById('catalog-container');
     container.innerHTML = '';
 
+    if (!data || data.length < 2) {
+        container.innerHTML = '<p style="grid-column:1/-1;text-align:center;">Gösterilecek veri bulunamadı</p>';
+        return;
+    }
+
     data.slice(1).forEach(row => {
         const card = document.createElement('div');
         card.className = 'catalog-card';
 
+        // Image section
         const imgDiv = document.createElement('div');
-        // Resim linki şimdi 6. sütunda (F)
-        const fileId = row[5].split('/')[5];
-        const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
-        const originalUrl = `https://drive.google.com/file/d/${fileId}/view`;
+        imgDiv.className = 'card-image';
+        
+        let imgUrl = '';
+        if (row[5] && row[5].includes('drive.google.com')) {
+            const fileId = row[5].split('/')[5];
+            imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
+        } else {
+            imgUrl = 'https://via.placeholder.com/400x300?text=Resim+Yok';
+        }
 
         const link = document.createElement('a');
-        link.href = originalUrl;
+        link.href = row[5] || '#';
         link.target = '_blank';
 
         const img = document.createElement('img');
-        img.src = thumbnailUrl;
-        img.alt = 'Catalog Image';
+        img.src = imgUrl;
+        img.alt = 'Ürün Görseli';
+        img.loading = 'lazy';
         link.appendChild(img);
         imgDiv.appendChild(link);
 
+        // Content section
         const contentDiv = document.createElement('div');
         contentDiv.className = 'card-content';
 
-        // Not alanı 5. sütun (E) olarak eklendi
         const fields = [
-            { label: 'Malzeme İsmi', value: row[0] },
-            { label: 'Part Number', value: row[1] },
-            { label: 'Kategori', value: row[2] },
-            { label: 'Uçak Tipi', value: row[3] },
-            { label: 'Not', value: row[4] }
+            { label: 'Malzeme İsmi', value: row[0] || 'Belirtilmemiş' },
+            { label: 'Part Number', value: row[1] || 'Belirtilmemiş' },
+            { label: 'Kategori', value: row[2] || 'Belirtilmemiş' },
+            { label: 'Uçak Tipi', value: row[3] || 'Belirtilmemiş' },
+            { label: 'Not', value: row[4] || 'Belirtilmemiş' }
         ];
 
         fields.forEach(field => {
             const div = document.createElement('div');
-            div.innerHTML = `<strong>${field.label}:</strong> ${field.value}`;
+            div.innerHTML = `<strong>${field.label}:</strong> <span>${field.value}</span>`;
             contentDiv.appendChild(div);
         });
 
@@ -89,16 +107,18 @@ function filterCatalog() {
 
     cards.forEach(card => {
         const content = card.querySelector('.card-content');
-        const malzeme = content.children[0].textContent.toLowerCase();
-        const partNo = content.children[1].textContent.toLowerCase();
-        const kategori = content.children[2].textContent;
-        const ucakTipi = content.children[3].textContent;
-        const not = content.children[4].textContent.toLowerCase(); // Not eklendi
+        const fields = content.querySelectorAll('div');
+        
+        const malzeme = fields[0].textContent.toLowerCase();
+        const partNo = fields[1].textContent.toLowerCase();
+        const kategori = fields[2].textContent;
+        const ucakTipi = fields[3].textContent;
+        const not = fields[4].textContent.toLowerCase();
 
         const searchMatch = !searchQuery || 
             malzeme.includes(searchQuery) || 
             partNo.includes(searchQuery) ||
-            not.includes(searchQuery); // Not aramaya dahil edildi
+            not.includes(searchQuery);
 
         const categoryMatch = !categoryFilter || kategori.includes(categoryFilter);
         const aircraftMatch = !aircraftFilter || ucakTipi.includes(aircraftFilter);
@@ -109,13 +129,12 @@ function filterCatalog() {
 
 function toggleMode() {
     const body = document.body;
-    if (body.classList.contains('light-mode')) {
-        body.classList.remove('light-mode');
-        body.classList.add('dark-mode');
-    } else {
-        body.classList.remove('dark-mode');
-        body.classList.add('light-mode');
-    }
+    body.classList.toggle('light-mode');
+    body.classList.toggle('dark-mode');
+    
+    // Save preference to localStorage
+    const isDarkMode = body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDarkMode);
 }
 
 function showDeveloperPopup() {
@@ -127,28 +146,33 @@ function showDeveloperPopup() {
 }
 
 function openSheet() {
-    window.open('https://docs.google.com/spreadsheets/d/16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk/edit?usp=sharing', '_blank');
+    window.open(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit?usp=sharing`, '_blank');
 }
 
-function init() {
-    const searchBox = document.getElementById('search-box');
-    const categoryFilter = document.getElementById('category-filter');
-    const aircraftFilter = document.getElementById('aircraft-filter');
-    const modeToggleBtn = document.getElementById('mode-toggle-btn');
-    const developerBtn = document.getElementById('developer-btn');
-    const sheetBtn = document.getElementById('sheet-btn');
+async function init() {
+    // Set initial theme from localStorage
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
 
-    searchBox.addEventListener('input', filterCatalog);
-    categoryFilter.addEventListener('change', filterCatalog);
-    aircraftFilter.addEventListener('change', filterCatalog);
-    modeToggleBtn.addEventListener('click', toggleMode);
-    developerBtn.addEventListener('click', showDeveloperPopup);
-    sheetBtn.addEventListener('click', openSheet);
+    // Event listeners
+    document.getElementById('search-box').addEventListener('input', filterCatalog);
+    document.getElementById('category-filter').addEventListener('change', filterCatalog);
+    document.getElementById('aircraft-filter').addEventListener('change', filterCatalog);
+    document.getElementById('mode-toggle-btn').addEventListener('click', toggleMode);
+    document.getElementById('developer-btn').addEventListener('click', showDeveloperPopup);
+    document.getElementById('sheet-btn').addEventListener('click', openSheet);
 
-    fetchSheetData().then(data => {
+    // Load data
+    const data = await fetchSheetData();
+    if (data) {
         populateFilters(data);
         populateCatalog(data);
-    });
+    } else {
+        document.getElementById('catalog-container').innerHTML = 
+            '<p style="grid-column:1/-1;text-align:center;color:red;">Veri yüklenirken hata oluştu. Lütfen sayfayı yenileyin.</p>';
+    }
 }
 
-init();
+// Initialize the app
+document.addEventListener('DOMContentLoaded', init);
