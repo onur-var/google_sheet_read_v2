@@ -51,15 +51,20 @@ function populateCatalog(data) {
         const imgDiv = document.createElement('div');
         imgDiv.className = 'card-image';
         
-        let imgUrl = '';
-        if (row[5] && row[5].includes('drive.google.com')) {
-            const fileId = row[5].split('/')[5];
-            // Daha kaliteli ve uygun boyutlu thumbnail için parametreler
-            imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400-h200-c`;
-        } else {
-            // Placeholder resmi
-            imgUrl = 'https://via.placeholder.com/400x200.png?text=Resim+Yok';
-        }
+      // Resim URL oluşturma kısmını mobil için optimize edelim
+let imgUrl;
+if (row[5] && row[5].includes('drive.google.com')) {
+    const fileId = row[5].split('/')[5];
+    // Mobil cihaz kontrolü
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (isMobile) {
+        imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w${window.innerWidth-40}`;
+    } else {
+        imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400-h200-c`;
+    }
+} else {
+    imgUrl = 'https://via.placeholder.com/400x200.png?text=Resim+Yok';
+}
 
         const link = document.createElement('a');
         link.href = row[5] || '#';
