@@ -209,33 +209,28 @@ body.dark-mode .card-image {
   }
 }
 
-/* Mobile Responsiveness */
 @media screen and (max-width: 768px) {
-  .header-container {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .header-right {
-    align-self: flex-end;
-  }
-  
-  #catalog-container {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  #filter-container {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  #filter-container select {
-    width: 100%;
-    max-width: 300px;
+  .card-image {
+    height: auto !important; /* Sabit yüksekliği kaldırıyoruz */
+    min-height: 150px; /* Minimum yükseklik belirliyoruz */
+    max-height: 250px; /* Maksimum yükseklik sınırı */
   }
   
   .catalog-card img {
-    height: 160px;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    padding: 5px;
+  }
+  
+  .catalog-card {
+    flex-direction: column;
+    height: auto; /* Kart yüksekliğini otomatik yapıyoruz */
+  }
+  
+  #catalog-container {
+    grid-template-columns: 1fr; /* Tek sütun düzeni */
+    gap: 15px;
   }
 }
