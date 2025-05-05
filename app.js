@@ -5,16 +5,10 @@ const RANGE = 'Sayfa1';
 async function fetchSheetData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
     document.getElementById('loading-spinner').classList.add('active');
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data.values;
-    } catch (error) {
-        console.error('Veri alınırken hata oluştu:', error);
-        return null;
-    } finally {
-        document.getElementById('loading-spinner').classList.remove('active');
-    }
+    const response = await fetch(url);
+    const data = await response.json();
+    document.getElementById('loading-spinner').classList.remove('active');
+    return data.values;
 }
 
 function populateFilters(data) {
@@ -47,65 +41,37 @@ function populateCatalog(data) {
         const card = document.createElement('div');
         card.className = 'catalog-card';
 
-        // Resim bölümü - Mobil uyumlu
         const imgDiv = document.createElement('div');
-        imgDiv.className = 'card-image';
-        
-        let imgUrl = '';
-        if (row[5] && row[5].includes('drive.google.com')) {
-            const fileId = row[5].split('/')[5];
-            // Mobil cihazlarda farklı boyut
-            const isMobile = window.innerWidth <= 768;
-            imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=${isMobile ? 'w300-h300' : 'w400-h400'}`;
-        } else {
-            imgUrl = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"%3E%3Crect fill="%23f5f5f5" width="400" height="300"/%3E%3Ctext fill="%23000" font-family="Arial" font-size="18" dy=".5em" text-anchor="middle" x="200" y="150"%3EResim Yok%3C/text%3E%3C/svg%3E';
-        }
-
-        const img = new Image();
-        img.src = imgUrl;
-        img.alt = 'Ürün Görseli';
-        img.loading = 'lazy';
-        img.style.maxHeight = '100%';
-        img.style.maxWidth = '100%';
-        img.style.objectFit = 'contain';
-        img.onload = function() {
-            // Resim yüklendikten sonra boyut ayarı
-            if (this.naturalHeight > this.naturalWidth) {
-                this.style.width = 'auto';
-                this.style.height = '100%';
-            } else {
-                this.style.width = '100%';
-                this.style.height = 'auto';
-            }
-        };
+        // Resim linki şimdi 6. sütunda (F)
+        const fileId = row[5].split('/')[5];
+        const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
+        const originalUrl = `https://drive.google.com/file/d/${fileId}/view`;
 
         const link = document.createElement('a');
-        link.href = row[5] || '#';
+        link.href = originalUrl;
         link.target = '_blank';
-        link.style.display = 'flex';
-        link.style.justifyContent = 'center';
-        link.style.alignItems = 'center';
-        link.style.height = '100%';
-        link.style.width = '100%';
+
+        const img = document.createElement('img');
+        img.src = thumbnailUrl;
+        img.alt = 'Catalog Image';
         link.appendChild(img);
         imgDiv.appendChild(link);
-        card.appendChild(imgDiv);
 
-        // Content section
         const contentDiv = document.createElement('div');
         contentDiv.className = 'card-content';
 
+        // Not alanı 5. sütun (E) olarak eklendi
         const fields = [
-            { label: 'Malzeme İsmi', value: row[0] || 'Belirtilmemiş' },
-            { label: 'Part Number', value: row[1] || 'Belirtilmemiş' },
-            { label: 'Kategori', value: row[2] || 'Belirtilmemiş' },
-            { label: 'Uçak Tipi', value: row[3] || 'Belirtilmemiş' },
-            { label: 'Not', value: row[4] || 'Belirtilmemiş' }
+            { label: 'Malzeme İsmi', value: row[0] },
+            { label: 'Part Number', value: row[1] },
+            { label: 'Kategori', value: row[2] },
+            { label: 'Uçak Tipi', value: row[3] },
+            { label: 'Not', value: row[4] }
         ];
 
         fields.forEach(field => {
             const div = document.createElement('div');
-            div.innerHTML = `<strong>${field.label}:</strong> <span>${field.value}</span>`;
+            div.innerHTML = `<strong>${field.label}:</strong> ${field.value}`;
             contentDiv.appendChild(div);
         });
 
@@ -123,18 +89,16 @@ function filterCatalog() {
 
     cards.forEach(card => {
         const content = card.querySelector('.card-content');
-        const fields = content.querySelectorAll('div');
-        
-        const malzeme = fields[0].textContent.toLowerCase();
-        const partNo = fields[1].textContent.toLowerCase();
-        const kategori = fields[2].textContent;
-        const ucakTipi = fields[3].textContent;
-        const not = fields[4].textContent.toLowerCase();
+        const malzeme = content.children[0].textContent.toLowerCase();
+        const partNo = content.children[1].textContent.toLowerCase();
+        const kategori = content.children[2].textContent;
+        const ucakTipi = content.children[3].textContent;
+        const not = content.children[4].textContent.toLowerCase(); // Not eklendi
 
         const searchMatch = !searchQuery || 
             malzeme.includes(searchQuery) || 
             partNo.includes(searchQuery) ||
-            not.includes(searchQuery);
+            not.includes(searchQuery); // Not aramaya dahil edildi
 
         const categoryMatch = !categoryFilter || kategori.includes(categoryFilter);
         const aircraftMatch = !aircraftFilter || ucakTipi.includes(aircraftFilter);
@@ -145,12 +109,13 @@ function filterCatalog() {
 
 function toggleMode() {
     const body = document.body;
-    body.classList.toggle('light-mode');
-    body.classList.toggle('dark-mode');
-    
-    // Save preference to localStorage
-    const isDarkMode = body.classList.contains('dark-mode');
-    localStorage.setItem('darkMode', isDarkMode);
+    if (body.classList.contains('light-mode')) {
+        body.classList.remove('light-mode');
+        body.classList.add('dark-mode');
+    } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+    }
 }
 
 function showDeveloperPopup() {
@@ -162,33 +127,28 @@ function showDeveloperPopup() {
 }
 
 function openSheet() {
-    window.open(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit?usp=sharing`, '_blank');
+    window.open('https://docs.google.com/spreadsheets/d/16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk/edit?usp=sharing', '_blank');
 }
 
-async function init() {
-    // Set initial theme from localStorage
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-    }
+function init() {
+    const searchBox = document.getElementById('search-box');
+    const categoryFilter = document.getElementById('category-filter');
+    const aircraftFilter = document.getElementById('aircraft-filter');
+    const modeToggleBtn = document.getElementById('mode-toggle-btn');
+    const developerBtn = document.getElementById('developer-btn');
+    const sheetBtn = document.getElementById('sheet-btn');
 
-    // Event listeners
-    document.getElementById('search-box').addEventListener('input', filterCatalog);
-    document.getElementById('category-filter').addEventListener('change', filterCatalog);
-    document.getElementById('aircraft-filter').addEventListener('change', filterCatalog);
-    document.getElementById('mode-toggle-btn').addEventListener('click', toggleMode);
-    document.getElementById('developer-btn').addEventListener('click', showDeveloperPopup);
-    document.getElementById('sheet-btn').addEventListener('click', openSheet);
+    searchBox.addEventListener('input', filterCatalog);
+    categoryFilter.addEventListener('change', filterCatalog);
+    aircraftFilter.addEventListener('change', filterCatalog);
+    modeToggleBtn.addEventListener('click', toggleMode);
+    developerBtn.addEventListener('click', showDeveloperPopup);
+    sheetBtn.addEventListener('click', openSheet);
 
-    // Load data
-    const data = await fetchSheetData();
-    if (data) {
+    fetchSheetData().then(data => {
         populateFilters(data);
         populateCatalog(data);
-    } else {
-        document.getElementById('catalog-container').innerHTML = 
-            '<p style="grid-column:1/-1;text-align:center;color:red;">Veri yüklenirken hata oluştu. Lütfen sayfayı yenileyin.</p>';
-    }
+    });
 }
 
-// Initialize the app
-document.addEventListener('DOMContentLoaded', init);
+init();
