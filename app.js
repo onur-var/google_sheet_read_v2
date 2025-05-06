@@ -112,25 +112,30 @@ function toggleMode() {
     if (body.classList.contains('light-mode')) {
         body.classList.remove('light-mode');
         body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark'); // Tercihi kaydet
     } else {
         body.classList.remove('dark-mode');
         body.classList.add('light-mode');
+        localStorage.setItem('theme', 'light'); // Tercihi kaydet
     }
 }
 
-function showDeveloperPopup() {
-    const popup = document.getElementById('developer-popup');
-    popup.classList.add('show');
-    setTimeout(() => {
-        popup.classList.remove('show');
-    }, 2000);
+// Sayfa yüklendiğinde tema tercihini kontrol et
+function checkSavedTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.remove('light-mode');
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+        document.body.classList.add('light-mode');
+    }
 }
 
-function openSheet() {
-    window.open('https://docs.google.com/spreadsheets/d/16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk/edit?usp=sharing', '_blank');
-}
-
+// init fonksiyonuna checkSavedTheme ekleyin
 function init() {
+    checkSavedTheme(); // Sayfa yüklendiğinde tema kontrolü
+    
     const searchBox = document.getElementById('search-box');
     const categoryFilter = document.getElementById('category-filter');
     const aircraftFilter = document.getElementById('aircraft-filter');
