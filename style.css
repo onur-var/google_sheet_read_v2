@@ -64,6 +64,7 @@ h1 {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    /*max-width: 800px;*/
     width: 90%;
     margin: 0 auto;
 }
@@ -147,19 +148,10 @@ body.dark-mode .catalog-card {
     100% { transform: rotate(360deg); }
 }
 
-.header-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
 .header-buttons {
     display: flex;
     gap: 10px;
     margin-bottom: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
 }
 
 .header-buttons button {
@@ -202,17 +194,15 @@ body.dark-mode .catalog-card {
         font-size: 20px;
     }
 
-    .header-buttons {
-        flex-direction: row; /* Butonlar yatay olarak sıralansın */
-        flex-wrap: wrap; /* Ekran küçükse alt satıra geçsin */
-        justify-content: center;
+        .header-buttons {
+        flex-direction: column;
         width: 100%;
+        align-items: center;
     }
 
-    .header-buttons button {
-        width: auto; /* Buton genişlikleri içeriklerine göre ayarlansın */
-        max-width: none;
-        padding: 8px 12px;
+        .header-buttons button {
+        width: 100%;
+        max-width: 200px;
     }
 
     #search-box {
@@ -230,23 +220,23 @@ body.dark-mode .catalog-card {
     }
 
     .catalog-card {
-        flex-direction: row !important;
+        flex-direction: row !important; /* Kesinlikle satır düzeni */
         align-items: flex-start;
         text-align: left;
-        padding: 10px;
+        padding: 10px; /* Daha kompakt bir padding */
     }
 
     .catalog-card img {
         width: 80px;
         height: auto;
-        margin-right: 10px !important;
-        margin-bottom: 0 !important;
-        min-width: 80px;
+        margin-right: 10px !important; /* Sağ boşluk kesinlikle uygulanacak */
+        margin-bottom: 0 !important; /* Alt boşluk kesinlikle kaldırılacak */
+        min-width: 80px; /* Resmin küçülmesini engelle */
     }
 
     .catalog-card .card-content {
-        flex: 1;
-        min-width: 0;
+        flex: 1; /* Kalan alanı doldur */
+        min-width: 0; /* Taşmayı engelle */
     }
 
     .mode-toggle {
