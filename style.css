@@ -152,6 +152,7 @@ body.dark-mode .catalog-card {
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
+    position: relative; /* Developer butonu için referans */
 }
 
 .header-buttons {
@@ -162,37 +163,20 @@ body.dark-mode .catalog-card {
     justify-content: center;
 }
 
-.header-buttons button {
-    padding: 8px 12px;
-    font-size: 14px;
+.developer-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
     border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
+    font-size: 18px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+    padding: 5px;
 }
 
-.header-buttons button:hover {
-    background-color: #0056b3;
-}
-
-#developer-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #007bff;
-    color: white;
-    padding: 20px 40px;
-    border-radius: 8px;
-    font-size: 24px;
-    opacity: 0;
-    transition: opacity 0.5s;
-    z-index: 1000;
-}
-
-#developer-popup.show {
+.developer-btn:hover {
     opacity: 1;
 }
 
@@ -200,6 +184,11 @@ body.dark-mode .catalog-card {
 @media screen and (max-width: 768px) {
     h1 {
         font-size: 20px;
+    }
+
+        .developer-btn {
+        font-size: 16px;
+        padding: 3px;
     }
 
     .header-buttons {
