@@ -130,19 +130,20 @@ function openSheet() {
     window.open('https://docs.google.com/spreadsheets/d/16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk/edit?usp=sharing', '_blank');
 }
 
+// init fonksiyonunda developer butonunu seçme kısmını güncelleyelim
 function init() {
     const searchBox = document.getElementById('search-box');
     const categoryFilter = document.getElementById('category-filter');
     const aircraftFilter = document.getElementById('aircraft-filter');
     const modeToggleBtn = document.getElementById('mode-toggle-btn');
-    const developerBtn = document.getElementById('developer-btn');
+    const developerBtn = document.getElementById('developer-btn'); // Bu satır zaten var
     const sheetBtn = document.getElementById('sheet-btn');
 
     searchBox.addEventListener('input', filterCatalog);
     categoryFilter.addEventListener('change', filterCatalog);
     aircraftFilter.addEventListener('change', filterCatalog);
     modeToggleBtn.addEventListener('click', toggleMode);
-    developerBtn.addEventListener('click', showDeveloperPopup);
+    developerBtn.addEventListener('click', showDeveloperPopup); // Bu satır zaten var
     sheetBtn.addEventListener('click', openSheet);
 
     fetchSheetData().then(data => {
