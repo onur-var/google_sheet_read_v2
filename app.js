@@ -89,4 +89,79 @@ function filterCatalog() {
 
     cards.forEach(card => {
         const content = card.querySelector('.card-content');
-        const malzeme = content.children
+        const malzeme = content.children[0].textContent.toLowerCase();
+        const partNo = content.children[1].textContent.toLowerCase();
+        const kategori = content.children[2].textContent;
+        const ucakTipi = content.children[3].textContent;
+        const not = content.children[4].textContent.toLowerCase(); // Not eklendi
+
+        const searchMatch = !searchQuery || 
+            malzeme.includes(searchQuery) || 
+            partNo.includes(searchQuery) ||
+            not.includes(searchQuery); // Not aramaya dahil edildi
+
+        const categoryMatch = !categoryFilter || kategori.includes(categoryFilter);
+        const aircraftMatch = !aircraftFilter || ucakTipi.includes(aircraftFilter);
+
+        card.style.display = searchMatch && categoryMatch && aircraftMatch ? '' : 'none';
+    });
+}
+
+function toggleMode() {
+    const body = document.body;
+    if (body.classList.contains('light-mode')) {
+        body.classList.remove('light-mode');
+        body.classList.add('dark-mode');
+    } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+    }
+}
+
+function showDeveloperPopup() {
+    const popup = document.getElementById('developer-popup');
+    popup.classList.add('show');
+    setTimeout(() => {
+        popup.classList.remove('show');
+    }, 2000);
+}
+
+function openSheet() {
+    window.open('https://docs.google.com/spreadsheets/d/16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk/edit?usp=sharing', '_blank');
+}
+
+function init() {
+    const searchBox = document.getElementById('search-box');
+    const categoryFilter = document.getElementById('category-filter');
+    const aircraftFilter = document.getElementById('aircraft-filter');
+    const modeToggleBtn = document.getElementById('mode-toggle-btn');
+    const developerBtn = document.getElementById('developer-btn');
+    const sheetBtn = document.getElementById('sheet-btn');
+    const clearSearchBtn = document.getElementById('clear-search');
+
+    searchBox.addEventListener('input', function() {
+        filterCatalog();
+        // Arama kutusunda yazı varsa temizleme butonunu göster
+        clearSearchBtn.style.display = this.value ? 'block' : 'none';
+    });
+
+    clearSearchBtn.addEventListener('click', function() {
+        searchBox.value = ''; // Arama kutusunu temizle
+        clearSearchBtn.style.display = 'none'; // Butonu gizle
+        filterCatalog(); // Filtrelemeyi yenile
+    });
+
+    searchBox.addEventListener('input', filterCatalog);
+    categoryFilter.addEventListener('change', filterCatalog);
+    aircraftFilter.addEventListener('change', filterCatalog);
+    modeToggleBtn.addEventListener('click', toggleMode);
+    developerBtn.addEventListener('click', showDeveloperPopup);
+    sheetBtn.addEventListener('click', openSheet);
+
+    fetchSheetData().then(data => {
+        populateFilters(data);
+        populateCatalog(data);
+    });
+}
+
+init();
