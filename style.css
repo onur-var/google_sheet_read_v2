@@ -229,6 +229,11 @@ body.dark-mode .clear-btn:hover {
         align-items: center;
     }
 
+        .clear-btn {
+        right: 5px;
+        font-size: 18px;
+    }
+
         .header-buttons button {
         width: 100%;
         max-width: 200px;
@@ -237,7 +242,7 @@ body.dark-mode .clear-btn:hover {
 #search-box {
   width: 100%;
   padding: 10px;
-  padding-right: 30px; /* Buton için boşluk bırak */
+        padding-right: 25px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
