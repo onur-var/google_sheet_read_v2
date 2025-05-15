@@ -39,6 +39,13 @@ h1 {
     outline: none;
 }
 
+.search-container {
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+  margin: 0 auto 20px;
+}
+
 #filter-container {
     display: flex;
     gap: 10px;
@@ -131,6 +138,28 @@ body.dark-mode .catalog-card {
     background-color: #0056b3;
 }
 
+.clear-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #999;
+  padding: 0 5px;
+  display: none;
+}
+
+.clear-btn:hover {
+  color: #333;
+}
+
+body.dark-mode .clear-btn:hover {
+  color: #ddd;
+}
+
 #loading-spinner {
     text-align: center;
     font-size: 16px;
@@ -190,6 +219,15 @@ body.dark-mode .catalog-card {
 
 /* Mobile compatibility */
 @media screen and (max-width: 768px) {
+        .search-container {
+        width: 100%;
+    }
+
+        .clear-btn {
+        right: 5px;
+        font-size: 18px;
+    }
+
     h1 {
         font-size: 20px;
     }
@@ -206,8 +244,14 @@ body.dark-mode .catalog-card {
     }
 
     #search-box {
-        font-size: 14px;
-    }
+  width: 100%;
+  padding: 10px;
+  padding-right: 30px; /* Buton için boşluk bırak */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
 
     #filter-container {
         flex-direction: column;
