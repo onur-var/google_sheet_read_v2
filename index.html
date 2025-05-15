@@ -7,17 +7,22 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="light-mode">
+
   <div class="header-container">
     <h1>Cabin P/N Katalog Uygulaması</h1>
     <div class="header-buttons">
       <button id="mode-toggle-btn" class="icon-btn" title="Gece/Gündüz Modu">🌓</button>
       <button id="developer-btn" class="icon-btn" title="Geliştirici">👨‍💻</button>
       <button id="sheet-btn" class="icon-btn" title="Veri Sayfası">📊</button>
+
     </div>
   </div>
+    <div class="search-container">
+  <input id="search-box" placeholder="Malzeme veya Parça Numarası veya Not ara..." />
+  <button id="clear-search" class="clear-btn">×</button>
+</div>
   <div id="app-container">
-    <input id="search-box" placeholder="Malzeme veya Parça Numarası veya Not ara..." />
-    <div id="filter-container">
+        <div id="filter-container">
       <select id="category-filter">
         <option value="">Tüm Malzemeler</option>
       </select>
