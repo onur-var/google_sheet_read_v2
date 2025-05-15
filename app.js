@@ -137,13 +137,29 @@ function init() {
     const modeToggleBtn = document.getElementById('mode-toggle-btn');
     const developerBtn = document.getElementById('developer-btn');
     const sheetBtn = document.getElementById('sheet-btn');
+    const clearSearchBtn = document.getElementById('clear-search');
 
-    searchBox.addEventListener('input', filterCatalog);
+    searchBox.addEventListener('input', function() {
+        filterCatalog();
     categoryFilter.addEventListener('change', filterCatalog);
     aircraftFilter.addEventListener('change', filterCatalog);
     modeToggleBtn.addEventListener('click', toggleMode);
     developerBtn.addEventListener('click', showDeveloperPopup);
     sheetBtn.addEventListener('click', openSheet);
+
+            // Arama kutusunda yazı varsa temizleme butonunu göster
+        clearSearchBtn.style.display = this.value ? 'block' : 'none';
+
+});
+            clearSearchBtn.addEventListener('click', function() {
+
+                searchBox.value = ''; // Arama kutusunu temizle
+        clearSearchBtn.style.display = 'none'; // Butonu gizle
+
+                filterCatalog(); // Filtrelemeyi yenile
+
+                });
+
 
     fetchSheetData().then(data => {
         populateFilters(data);
