@@ -1,9 +1,10 @@
+app.js
 const API_KEY = 'AIzaSyDltb5FbPvL9bLgj_GK4_DEDaPK0A7oM_g';
 const SHEET_ID = '16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk';
 const RANGE = 'Sayfa1';
 
 async function fetchSheetData() {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+    const url = https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY};
     document.getElementById('loading-spinner').classList.add('active');
     const response = await fetch(url);
     const data = await response.json();
@@ -44,8 +45,8 @@ function populateCatalog(data) {
         const imgDiv = document.createElement('div');
         // Resim linki şimdi 6. sütunda (F)
         const fileId = row[5].split('/')[5];
-        const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
-        const originalUrl = `https://drive.google.com/file/d/${fileId}/view`;
+        const thumbnailUrl = https://drive.google.com/thumbnail?id=${fileId};
+        const originalUrl = https://drive.google.com/file/d/${fileId}/view;
 
         const link = document.createElement('a');
         link.href = originalUrl;
@@ -71,7 +72,7 @@ function populateCatalog(data) {
 
         fields.forEach(field => {
             const div = document.createElement('div');
-            div.innerHTML = `<strong>${field.label}:</strong> ${field.value}`;
+            div.innerHTML = <strong>${field.label}:</strong> ${field.value};
             contentDiv.appendChild(div);
         });
 
@@ -139,38 +140,13 @@ function init() {
     const sheetBtn = document.getElementById('sheet-btn');
     const clearSearchBtn = document.getElementById('clear-search');
 
-function init() {
-    const searchBox = document.getElementById('search-box');
-    const categoryFilter = document.getElementById('category-filter');
-    const aircraftFilter = document.getElementById('aircraft-filter');
-    const modeToggleBtn = document.getElementById('mode-toggle-btn');
-    const developerBtn = document.getElementById('developer-btn');
-    const sheetBtn = document.getElementById('sheet-btn');
-    const clearSearchBtn = document.getElementById('clear-search');
-
-    // Event listener'lar düzgün şekilde ana fonksiyon dışında tanımlanmalı
-    searchBox.addEventListener('input', function () {
+    searchBox.addEventListener('input', function() {
         filterCatalog();
-        clearSearchBtn.style.display = this.value ? 'block' : 'none';
-    });
-
     categoryFilter.addEventListener('change', filterCatalog);
     aircraftFilter.addEventListener('change', filterCatalog);
     modeToggleBtn.addEventListener('click', toggleMode);
     developerBtn.addEventListener('click', showDeveloperPopup);
     sheetBtn.addEventListener('click', openSheet);
-    clearSearchBtn.addEventListener('click', function () {
-        searchBox.value = '';
-        clearSearchBtn.style.display = 'none';
-        filterCatalog();
-    });
-
-    fetchSheetData().then(data => {
-        populateFilters(data);
-        populateCatalog(data);
-    });
-}
-
 
             // Arama kutusunda yazı varsa temizleme butonunu göster
         clearSearchBtn.style.display = this.value ? 'block' : 'none';
