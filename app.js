@@ -139,13 +139,38 @@ function init() {
     const sheetBtn = document.getElementById('sheet-btn');
     const clearSearchBtn = document.getElementById('clear-search');
 
-    searchBox.addEventListener('input', function() {
+function init() {
+    const searchBox = document.getElementById('search-box');
+    const categoryFilter = document.getElementById('category-filter');
+    const aircraftFilter = document.getElementById('aircraft-filter');
+    const modeToggleBtn = document.getElementById('mode-toggle-btn');
+    const developerBtn = document.getElementById('developer-btn');
+    const sheetBtn = document.getElementById('sheet-btn');
+    const clearSearchBtn = document.getElementById('clear-search');
+
+    // Event listener'lar düzgün şekilde ana fonksiyon dışında tanımlanmalı
+    searchBox.addEventListener('input', function () {
         filterCatalog();
+        clearSearchBtn.style.display = this.value ? 'block' : 'none';
+    });
+
     categoryFilter.addEventListener('change', filterCatalog);
     aircraftFilter.addEventListener('change', filterCatalog);
     modeToggleBtn.addEventListener('click', toggleMode);
     developerBtn.addEventListener('click', showDeveloperPopup);
     sheetBtn.addEventListener('click', openSheet);
+    clearSearchBtn.addEventListener('click', function () {
+        searchBox.value = '';
+        clearSearchBtn.style.display = 'none';
+        filterCatalog();
+    });
+
+    fetchSheetData().then(data => {
+        populateFilters(data);
+        populateCatalog(data);
+    });
+}
+
 
             // Arama kutusunda yazı varsa temizleme butonunu göster
         clearSearchBtn.style.display = this.value ? 'block' : 'none';
