@@ -1,10 +1,9 @@
-app.js
 const API_KEY = 'AIzaSyDltb5FbPvL9bLgj_GK4_DEDaPK0A7oM_g';
 const SHEET_ID = '16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk';
 const RANGE = 'Sayfa1';
 
 async function fetchSheetData() {
-    const url = https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY};
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
     document.getElementById('loading-spinner').classList.add('active');
     const response = await fetch(url);
     const data = await response.json();
@@ -43,10 +42,9 @@ function populateCatalog(data) {
         card.className = 'catalog-card';
 
         const imgDiv = document.createElement('div');
-        // Resim linki şimdi 6. sütunda (F)
         const fileId = row[5].split('/')[5];
-        const thumbnailUrl = https://drive.google.com/thumbnail?id=${fileId};
-        const originalUrl = https://drive.google.com/file/d/${fileId}/view;
+        const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
+        const originalUrl = `https://drive.google.com/file/d/${fileId}/view`;
 
         const link = document.createElement('a');
         link.href = originalUrl;
@@ -61,7 +59,6 @@ function populateCatalog(data) {
         const contentDiv = document.createElement('div');
         contentDiv.className = 'card-content';
 
-        // Not alanı 5. sütun (E) olarak eklendi
         const fields = [
             { label: 'Malzeme İsmi', value: row[0] },
             { label: 'Part Number', value: row[1] },
@@ -72,7 +69,7 @@ function populateCatalog(data) {
 
         fields.forEach(field => {
             const div = document.createElement('div');
-            div.innerHTML = <strong>${field.label}:</strong> ${field.value};
+            div.innerHTML = `<strong>${field.label}:</strong> ${field.value}`;
             contentDiv.appendChild(div);
         });
 
@@ -94,12 +91,12 @@ function filterCatalog() {
         const partNo = content.children[1].textContent.toLowerCase();
         const kategori = content.children[2].textContent;
         const ucakTipi = content.children[3].textContent;
-        const not = content.children[4].textContent.toLowerCase(); // Not eklendi
+        const not = content.children[4].textContent.toLowerCase();
 
         const searchMatch = !searchQuery || 
             malzeme.includes(searchQuery) || 
             partNo.includes(searchQuery) ||
-            not.includes(searchQuery); // Not aramaya dahil edildi
+            not.includes(searchQuery);
 
         const categoryMatch = !categoryFilter || kategori.includes(categoryFilter);
         const aircraftMatch = !aircraftFilter || ucakTipi.includes(aircraftFilter);
@@ -140,27 +137,22 @@ function init() {
     const sheetBtn = document.getElementById('sheet-btn');
     const clearSearchBtn = document.getElementById('clear-search');
 
-    searchBox.addEventListener('input', function() {
+    searchBox.addEventListener('input', () => {
         filterCatalog();
+        clearSearchBtn.style.display = searchBox.value ? 'block' : 'none';
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+        searchBox.value = '';
+        clearSearchBtn.style.display = 'none';
+        filterCatalog();
+    });
+
     categoryFilter.addEventListener('change', filterCatalog);
     aircraftFilter.addEventListener('change', filterCatalog);
     modeToggleBtn.addEventListener('click', toggleMode);
     developerBtn.addEventListener('click', showDeveloperPopup);
     sheetBtn.addEventListener('click', openSheet);
-
-            // Arama kutusunda yazı varsa temizleme butonunu göster
-        clearSearchBtn.style.display = this.value ? 'block' : 'none';
-
-});
-            clearSearchBtn.addEventListener('click', function() {
-
-                searchBox.value = ''; // Arama kutusunu temizle
-        clearSearchBtn.style.display = 'none'; // Butonu gizle
-
-                filterCatalog(); // Filtrelemeyi yenile
-
-                });
-
 
     fetchSheetData().then(data => {
         populateFilters(data);
